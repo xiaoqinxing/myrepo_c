@@ -15,6 +15,7 @@
 #define malloc  
 
 #define MALLOC(num, type) (type *)alloc((num) * sizeof(type))
+#define FREE(pointer) free_c(&(pointer))
 extern void *alloc(size_t size);
 
 #endif // !__ALLOC_H__
