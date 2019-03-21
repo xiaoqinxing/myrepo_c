@@ -24,6 +24,9 @@
     <ClInclude Include="invendor.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="version.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="myrepo_c.c">
@@ -36,6 +39,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="invrecord.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="version.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
