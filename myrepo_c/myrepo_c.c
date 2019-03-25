@@ -31,6 +31,8 @@ int main()
 	//如果引用NULL指向的数也会出问题，这些编译器都检查不出来
 	//printf("回收后的指针地址2%p\r\n", a->info.subassy);
     LOGE("OK");
-    LOGE("%s", "hello");
-    LOGE("%s", "DSFASDJKHFKL ASHJDLFIHKSDFDSLKAJFKLJASDLKJFK");
+    LOGD("%s", "hello");
+    SETLOG(MAIN_MODULE, DBG_DEBUG);
+    LOGD("%s", "hello2");
+    LOGI("%s", "DSFASDJKHFKL ASHJDLFIHKSDFDSLKAJFKLJASDLKJFK");
 }

@@ -16,9 +16,9 @@ extern "C" {
 @input   £ºVERSION/MAJOR/MINOR
 ******************************************************************/
 
-#define  VERSION   "3"
-#define  MAJOR     "1"
-#define  MINOR     "0"
+#define  VERSION   "0"
+#define  MAJOR     "0"
+#define  MINOR     "3"
 
 #define  FUZZER_VERSION VERSION"."MAJOR"."MINOR
 

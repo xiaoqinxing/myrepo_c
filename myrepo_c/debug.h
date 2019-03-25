@@ -31,7 +31,7 @@ typedef enum {
 }debug_module_t;
 
 typedef struct {
-    debug_level_t  level;
+    debug_level_t  debug_level;
     const char     *name;
 } module_debug_t;
 
@@ -44,11 +44,16 @@ typedef struct {
 另有一种写法是#define LOGE(fmt, args...) \
     LOG(MAIN_MODULE, DBG_ERR,  fmt, ##args)
 实验证明不行，但是在高通代码中是可以编译的，可能和编译规则有关
+将判断放在函数之前，可以减少为打印函数分配栈的时间和空间
 ******************************************************************/
+extern module_debug_t debug_level[MAX_MODULE];
 
-#define LOG(module, level, fmt, ...)  \
-    debug_print(module, level, __func__, __LINE__, fmt, __VA_ARGS__);
-
+#define LOG(module, level, fmt, ...)                                       \
+{                                                                          \
+    if (debug_level[module].debug_level >= level) {                        \
+        debug_print(module, level, __func__, __LINE__, fmt, __VA_ARGS__);  \
+    }                                                                      \
+}
 #define LOGE(fmt, ...) LOG(MAIN_MODULE, DBG_ERR,  fmt, __VA_ARGS__)
 #define LOGW(fmt, ...) LOG(MAIN_MODULE, DBG_WARN, fmt, __VA_ARGS__)
 #define LOGH(fmt, ...) LOG(MAIN_MODULE, DBG_HIGH, fmt, __VA_ARGS__)
@@ -56,6 +61,9 @@ typedef struct {
 #define LOGL(fmt, ...) LOG(MAIN_MODULE, DBG_LOW,  fmt, __VA_ARGS__)
 #define LOGI(fmt, ...) LOG(MAIN_MODULE, DBG_INFO, fmt, __VA_ARGS__)
 
+#define SETLOG(module, level) debug_level_set(module, level)
+
+void debug_level_set(debug_module_t module, debug_level_t level);
 
 #ifdef __cplusplus
 }
