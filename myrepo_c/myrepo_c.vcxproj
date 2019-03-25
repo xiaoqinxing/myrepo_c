@@ -153,12 +153,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="alloc.h" />
+    <ClInclude Include="debug.h" />
     <ClInclude Include="invendor.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="alloc.c" />
+    <ClCompile Include="debug.c" />
     <ClCompile Include="invrecord.c" />
     <ClCompile Include="myrepo_c.c" />
     <ClCompile Include="pch.c">

@@ -3,11 +3,14 @@
 *   功能描述    ：
 *   使用说明    ：
 ******************************************************************/
+#ifndef _VERSION_H_
+#define _VERSION_H_
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    /**************************************************************
+/*****************************************************************
 @brief   : 版本控制
 @author  : xiaoqinxing
 @input   ：VERSION/MAJOR/MINOR
@@ -85,3 +88,5 @@ void version_print(void);
 #ifdef __cplusplus
 }
 #endif
+
+#endif // !_VERSION_H_
