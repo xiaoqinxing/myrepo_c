@@ -38,3 +38,19 @@ void free_c(void **pointer) {
 		*pointer = NULL;
 	}
 }
+
+/******************************************************************
+@brief   : 内存处理模板函数
+@author  : xiaoqinxing
+@input   ：BufferContext
+@output  ：0  - success 
+           -1 - 申请内存失败
+@detail  : none
+******************************************************************/
+char MemBuffer(BufferContext *pThis) {
+    pThis->pBuf = malloc(pThis->size);
+    if (pThis->pBuf == NULL) return -1;
+    pThis->process(pThis);
+    free(pThis->pBuf);
+    return 0;
+}

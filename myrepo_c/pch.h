@@ -15,6 +15,7 @@
 #include "stdlib.h"
 #include "version.h"
 #include "debug.h"
+#include "file_operate.h"
 
 /**************************************************
                     typedefs

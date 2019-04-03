@@ -36,6 +36,25 @@ extern "C" {
 extern void *alloc(size_t size);
 extern void free_c(void **pointer);
 
+
+/******************************************************************
+@brief   : 内存处理模板结构体
+@author  : xiaoqinxing
+@input   ：pBuf    - 返回的指针
+           size    - 申请的内存大小
+           process - 处理函数
+@output  ：none
+@detail  : none
+******************************************************************/
+
+typedef struct BufferContext {
+    void *pBuf;
+    size_t size;
+    void(*process)(struct BufferContext *p);
+}BufferContext;
+
+char MemBuffer(BufferContext *pThis);
+
 #endif // !__ALLOC_H__
 
 #ifdef __cplusplus
