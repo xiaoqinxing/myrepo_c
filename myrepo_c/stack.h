@@ -59,9 +59,9 @@ typedef struct Stack {
 }Stack;
 #endif
 
-char is_full(struct Stack *stack_obj);
-void set_length(struct Stack *stack_obj, unsigned int value);
-char is_empty(Stack * stack_obj);
+char is_stack_full(struct Stack *stack_obj);
+void set_stack_length(struct Stack *stack_obj, unsigned int value);
+char is_stack_empty(Stack * stack_obj);
 void push(Stack * stack_obj, STACK_TYPE value);
 STACK_TYPE pop(Stack * stack_obj);
 STACK_TYPE top(Stack * stack_obj);

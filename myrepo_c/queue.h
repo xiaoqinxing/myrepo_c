@@ -34,7 +34,7 @@ typedef struct Queue {
     QueueNode *rear_node;   //rear
 #if QUEUE_LIMIT
     QUEUE_PRIVATE queue_private;
-    char(*is_full)(struct Queue *queue_obj);
+    char (*is_full)(struct Queue *queue_obj);
     void (*set_length)(struct Queue * queue_obj, unsigned int value);
 #endif
     char (*is_empty)(struct Queue *queue_obj);
@@ -43,9 +43,9 @@ typedef struct Queue {
     QUEUE_TYPE (*first)(struct Queue *queue_obj);
 }Queue;
 
-char is_full(Queue *queue_obj);
-void set_length(Queue * queue_obj, unsigned int value);
-char is_empty(Queue * queue_obj);
+char is_queue_full(Queue *queue_obj);
+void set_queue_length(Queue * queue_obj, unsigned int value);
+char is_queue_empty(Queue * queue_obj);
 void enqueue(Queue * queue_obj, QUEUE_TYPE value);
 QUEUE_TYPE dequeue(Queue *queue_obj);
 QUEUE_TYPE first(Queue * queue_obj);

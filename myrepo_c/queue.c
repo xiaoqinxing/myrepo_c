@@ -14,7 +14,7 @@
 @detail  : STACK_LIMIT使能生效
 ******************************************************************/
 #if QUEUE_LIMIT
-static char is_full(Queue *queue_obj)
+static char is_queue_full(Queue *queue_obj)
 {
     return queue_obj->queue_private.length >= queue_obj->queue_private.max_len;
 }
@@ -28,7 +28,7 @@ static char is_full(Queue *queue_obj)
 @detail  : STACK_LIMIT使能生效
 ******************************************************************/
 #if QUEUE_LIMIT
-static void set_length(Queue * queue_obj, unsigned int value)
+static void set_queue_length(Queue * queue_obj, unsigned int value)
 {
     queue_obj->queue_private.max_len = value;
 }
@@ -41,7 +41,7 @@ static void set_length(Queue * queue_obj, unsigned int value)
 @output  ：1 - empty
 @detail  : none
 ******************************************************************/
-static char is_empty(Queue *queue_obj) {
+static char is_queue_empty(Queue *queue_obj) {
     return queue_obj->front_node == NULL;
 }
 
@@ -57,7 +57,7 @@ static char is_empty(Queue *queue_obj) {
 static void enqueue(Queue *queue_obj, QUEUE_TYPE value) {
     QueueNode *new_node;
 #if QUEUE_LIMIT
-    if (is_full(queue_obj)) {
+    if (is_queue_full(queue_obj)) {
         LOGE("queue is full,enqueue is error");
         return;
     }
@@ -84,7 +84,7 @@ static void enqueue(Queue *queue_obj, QUEUE_TYPE value) {
 ******************************************************************/
 static QUEUE_TYPE dequeue(Queue *queue_obj) {
     QueueNode *first_node = queue_obj->front_node;
-    if (is_empty(queue_obj)) {
+    if (is_queue_empty(queue_obj)) {
         LOGE("queue is empty,dequeue is error");
         return -1;
     }
@@ -109,7 +109,7 @@ static QUEUE_TYPE dequeue(Queue *queue_obj) {
 @detail  : none
 ******************************************************************/
 static QUEUE_TYPE first(Queue *queue_obj) {
-    if (is_empty(queue_obj)) {
+    if (is_queue_empty(queue_obj)) {
         LOGE("stack is empty,top is null");
         return -1;
     }
@@ -131,13 +131,13 @@ Queue* create_queue(void) {
 #if QUEUE_LIMIT
     queue_obj->queue_private.length = 0;
     queue_obj->queue_private.max_len = QUEUE_LIMIT_DEFAULT_LENTH;
-    queue_obj->set_length = set_length;
-    queue_obj->is_full = is_full;
+    queue_obj->set_length = set_queue_length;
+    queue_obj->is_full = is_queue_full;
 #endif
     queue_obj->enqueue = enqueue;
     queue_obj->dequeue = dequeue;
     queue_obj->first = first;
-    queue_obj->is_empty = is_empty;
+    queue_obj->is_empty = is_queue_empty;
     return queue_obj;
 }
 
@@ -149,7 +149,7 @@ Queue* create_queue(void) {
 @detail  : none
 ******************************************************************/
 void destroy_queue(Queue *queue_obj) {
-    while (!is_empty(queue_obj)) {
+    while (!is_queue_empty(queue_obj)) {
         dequeue(queue_obj);
     }
     FREE(queue_obj);
