@@ -5,8 +5,7 @@
 ******************************************************************/
 #include "pch.h"
 #include "app.h"
-#include "invendor.h"
-#include "stack.h"
+
 void test1_mem_alloc() {
     LOGE("测试程序");
     Invrec *a;
@@ -127,16 +126,44 @@ void test4_size_read_func() {
 void test5_stack_func() {
     Stack *tmp = create_stack();
     LOGE("创建一个堆栈，并判断是否为空-%d", tmp->is_empty(tmp));
-    tmp->push(tmp, 1);
-    LOGE("PUSH 1:%d", tmp->top(tmp));
-    tmp->push(tmp, 2);
-    LOGE("PUSH 2:%d", tmp->top(tmp));
-    tmp->pop(tmp);
-    LOGE("POP:%d", tmp->top(tmp));
+    tmp->set_length(tmp, 3);
+    LOGE("设置堆栈长度为3");
+    for (int j = 0; j < 2; j++) {
+        for (int i = 0; i < 6; i++) {
+            tmp->push(tmp, i);
+            LOGE("after push,top is %d", tmp->top(tmp));
+        }
+        for (int i = 0; i < 5; i++) {
+            LOGE("pop time:%d value = %d", i + 1, tmp->pop(tmp));
+        }
+    }
     destroy_stack(tmp);
-    LOGE("%p", tmp);
+    LOGE("销毁堆栈后堆栈指针为%p", tmp);
 }
-
+/******************************************************************
+@brief   : 单链表实现队列
+@author  : xiaoqinxing
+@input   ：none
+@output  ：none
+@detail  : none
+******************************************************************/
+void test6_queue_func() {
+    Queue *tmp = create_queue();
+    LOGE("创建一个队列，并判断是否为空-%d", tmp->is_empty(tmp));
+    tmp->set_length(tmp, 5);
+    LOGE("设置队列长度为5");
+    for (int j = 0; j < 2; j++) {
+        for (int i = 0; i < 10; i++) {
+            LOGE("enqueue:%d", i);
+            tmp->enqueue(tmp, i);
+        }
+        for (int i = 0; i < 8; i++) {
+            LOGE("dequeue time:%d value = %d", i + 1, tmp->dequeue(tmp));
+        }
+    }
+    destroy_queue(tmp);
+    LOGE("销毁队列后队列指针为%p", tmp);
+}
 /******************************************************************
 @brief   : 文件拷贝模板实例
 @author  : xiaoqinxing

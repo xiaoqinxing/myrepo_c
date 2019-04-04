@@ -7,6 +7,34 @@
 #include "stack.h"
 
 /******************************************************************
+@brief   : 判断堆栈是否为满
+@author  : xiaoqinxing
+@input   ：none
+@output  ：none
+@detail  : STACK_LIMIT使能生效
+******************************************************************/
+#if STACK_LIMIT
+char is_full(Stack * stack_obj)
+{
+    return stack_obj->stack_private.length >= stack_obj->stack_private.max_len;
+}
+#endif
+
+/******************************************************************
+@brief   : 设置堆栈最大长度
+@author  : xiaoqinxing
+@input   ：none
+@output  ：none
+@detail  : STACK_LIMIT使能生效
+******************************************************************/
+#if STACK_LIMIT
+void set_length(Stack * stack_obj, unsigned int value)
+{
+    stack_obj->stack_private.max_len = value;
+}
+#endif
+
+/******************************************************************
 @brief   : 判断堆栈是否为空
 @author  : xiaoqinxing
 @input   ：none
@@ -26,10 +54,19 @@ char is_empty(Stack *stack_obj) {
 ******************************************************************/
 void push(Stack *stack_obj, STACK_TYPE value){
     StackNode *new_node;
+#if STACK_LIMIT
+    if (is_full(stack_obj)) {
+        LOGE("stack is full,push is error");
+        return;
+    }
+#endif
     new_node = MALLOC(1, StackNode);
     new_node->value = value;
     new_node->next = stack_obj->node;
     stack_obj->node = new_node;
+#if STACK_LIMIT
+    stack_obj->stack_private.length++;
+#endif
 }
 
 /******************************************************************
@@ -39,14 +76,19 @@ void push(Stack *stack_obj, STACK_TYPE value){
 @output  ：none
 @detail  : none
 ******************************************************************/
-void pop(Stack *stack_obj) {
+STACK_TYPE pop(Stack *stack_obj) {
     StackNode *first_node = stack_obj->node;
     if (is_empty(stack_obj)) {
         LOGE("stack is empty,pop is error");
-        return;
+        return -1;
     }
+    STACK_TYPE rc = first_node->value;
     stack_obj->node = stack_obj->node->next;
     FREE(first_node);
+#if STACK_LIMIT
+    stack_obj->stack_private.length--;
+#endif
+    return rc;
 }
 
 /******************************************************************
@@ -59,6 +101,7 @@ void pop(Stack *stack_obj) {
 STACK_TYPE top(Stack *stack_obj) {
     if (is_empty(stack_obj)) {
         LOGE("stack is empty,top is null");
+        return -1;
     }
     else
         return stack_obj->node->value;
@@ -74,6 +117,11 @@ STACK_TYPE top(Stack *stack_obj) {
 Stack* create_stack(void) {
     Stack *stack_obj=MALLOC(1,Stack);
     stack_obj->node = NULL;
+#if STACK_LIMIT
+    stack_obj->stack_private.length = 0;
+    stack_obj->stack_private.max_len = STACK_LIMIT_DEFAULT_LENTH;
+    stack_obj->set_length = set_length;
+#endif
     stack_obj->push = push;
     stack_obj->pop  = pop;
     stack_obj->top = top;

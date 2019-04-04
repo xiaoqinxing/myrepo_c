@@ -158,6 +158,7 @@
     <ClInclude Include="file_operate.h" />
     <ClInclude Include="invendor.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="queue.h" />
     <ClInclude Include="stack.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
@@ -174,6 +175,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="queue.c" />
     <ClCompile Include="stack.c" />
     <ClCompile Include="version.c" />
   </ItemGroup>

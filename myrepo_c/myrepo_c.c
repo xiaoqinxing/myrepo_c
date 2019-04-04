@@ -24,6 +24,9 @@ int main()
             case 5:
                 test5_stack_func();
                 break;
+            case 6:
+                test6_queue_func();
+                break;
             default:
                 LOGE("³¬³ö·¶Î§");
                 break;
