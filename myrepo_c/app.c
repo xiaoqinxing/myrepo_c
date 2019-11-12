@@ -5,6 +5,7 @@
 ******************************************************************/
 #include "pch.h"
 #include "app.h"
+#include "pthread.h"
 
 void test1_mem_alloc() {
     LOGE("≤‚ ‘≥Ã–Ú");

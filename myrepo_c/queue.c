@@ -54,12 +54,12 @@ static char is_queue_empty(Queue *queue_obj) {
            需要将front_node和rear_node都指向new_node；之后只需要将
            rear_node的指针指向new_node，而front_node不需要动了。
 ******************************************************************/
-static void enqueue(Queue *queue_obj, QUEUE_TYPE value) {
+static char enqueue(Queue *queue_obj, QUEUE_TYPE value) {
     QueueNode *new_node;
 #if QUEUE_LIMIT
     if (is_queue_full(queue_obj)) {
         LOGE("queue is full,enqueue is error");
-        return;
+        return ERR_QUEUE_FULL;
     }
 #endif
     new_node = MALLOC(1, QueueNode);
@@ -73,8 +73,33 @@ static void enqueue(Queue *queue_obj, QUEUE_TYPE value) {
 #if QUEUE_LIMIT
     queue_obj->queue_private.length++;
 #endif
+    return NO_ERR;
 }
 
+/******************************************************************
+@brief   : QueueEnqueueWithPriority
+@author  : xiaoqinxing
+@input   ：none
+@output  ：none
+@detail  : none
+******************************************************************/
+static char QueueEnqueueWithPriority(Queue * queue_obj, QUEUE_TYPE value) {
+    QueueNode *new_node;
+#if QUEUE_LIMIT
+    if (is_queue_full(queue_obj)) {
+        LOGE("queue is full,enqueue is error");
+        return ERR_QUEUE_FULL;
+    }
+#endif
+    new_node = MALLOC(1, QueueNode);
+    new_node->value = value;
+    new_node->next = queue_obj->front_node;
+    queue_obj->front_node = new_node;
+#if QUEUE_LIMIT
+    queue_obj->queue_private.length++;
+#endif
+    return NO_ERR;
+}
 /******************************************************************
 @brief   : dequeue
 @author  : xiaoqinxing
@@ -138,6 +163,7 @@ Queue* create_queue(void) {
     queue_obj->dequeue = dequeue;
     queue_obj->first = first;
     queue_obj->is_empty = is_queue_empty;
+    queue_obj->enqueueWithPriority = QueueEnqueueWithPriority;
     return queue_obj;
 }
 

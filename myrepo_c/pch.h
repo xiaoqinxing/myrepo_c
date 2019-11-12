@@ -28,6 +28,12 @@ typedef  unsigned short     uint16_t;
 typedef           long       int32_t;
 typedef  unsigned long      uint32_t;
 
+//使用pthread.h需要此宏定义
+#define HAVE_STRUCT_TIMESPEC
 
+#define NO_ERR  0
+#define ERROR     1
+#define NO_MEMORY 2
+#define ERR_QUEUE_FULL 3
 
 #endif //PCH_H
