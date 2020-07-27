@@ -13,7 +13,7 @@ extern "C" {
 #define QUEUE_TYPE cmd_type_t
 
 //是否限制队列长度
-#define QUEUE_LIMIT 1
+#define QUEUE_LIMIT 0
 
 //队列默认长度，开启STACK_LIMIT后生效
 #define QUEUE_LIMIT_DEFAULT_LENTH 10

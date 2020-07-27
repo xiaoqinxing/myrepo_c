@@ -13,7 +13,7 @@ extern "C" {
 #define STACK_TYPE int
 
 //是否限制堆栈长度
-#define STACK_LIMIT 1
+#define STACK_LIMIT 0
 
 //堆栈默认长度，开启STACK_LIMIT后生效
 #define STACK_LIMIT_DEFAULT_LENTH 10
