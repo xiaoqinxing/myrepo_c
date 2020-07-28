@@ -6,10 +6,11 @@
 #include "logprint.h"
 
 module_debug_t debug_level[MAX_MODULE] = {
-    {DBG_ERR, "<MAIN>"},
-    {DBG_ERR, "<SUB1>"},
-    {DBG_ERR, "<SUB2>"},
+    {DBG_ERR, "MAIN"},
+    {DBG_ERR, "LEAK"},
+    {DBG_ERR, "COMMON"},
 };
+
 static char log_buffer[DBG_MAX_STR_LEN] = {0};
 /******************************************************************
 @brief   : 打印等级设置
@@ -20,20 +21,8 @@ static char log_buffer[DBG_MAX_STR_LEN] = {0};
 ******************************************************************/
 void debug_level_set(debug_module_t module, debug_level_t level)
 {
-    switch (module)
-    {
-    case MAIN_MODULE:
-        debug_level[MAIN_MODULE].debug_level = level;
-        break;
-    case SUB_MODULE1:
-        debug_level[SUB_MODULE1].debug_level = level;
-        break;
-    case SUB_MODULE2:
-        debug_level[SUB_MODULE1].debug_level = level;
-        break;
-    default:
-        break;
-    }
+    debug_level[module].debug_level = level;
+    return;
 }
 
 /******************************************************************
@@ -73,6 +62,6 @@ void debug_print(const debug_module_t module, const debug_level_t level,
     va_start(args, format);
     log_vsnprintf(log_buffer, DBG_MAX_STR_LEN, format, args);
     va_end(args);
-    printf("%s [%s] %d: %s\n",
-           debug_level[module].name, func, line, log_buffer);
+    printf("%s %s [%s] %d: %s\n",
+           debug_level[module].name, level_to_str[level], func, line, log_buffer);
 }

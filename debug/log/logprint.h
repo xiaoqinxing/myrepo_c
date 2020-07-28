@@ -11,6 +11,7 @@ extern "C" {
 #endif
 
 #include "stdarg.h"
+#include "stdio.h"
 #define DBG_MAX_STR_LEN 64
 
 typedef enum {
@@ -23,10 +24,19 @@ typedef enum {
     DBG_INFO  = 6
 }debug_level_t;
 
+static const char *level_to_str[] = {
+    "",        /* DBG_NONE  */
+    "<E>", /* DBG_ERR   */
+    "<W>", /* DBG_WARN  */
+    "<H>", /* DBG_HIGH  */
+    "<D>", /* DBG_DEBUG */
+    "<L>", /* DBG_LOW   */
+    "<I>"  /* DBG_INFO  */
+};
 typedef enum {
     MAIN_MODULE = 0,
-    SUB_MODULE1,
-    SUB_MODULE2,
+    LEAK_DEBUG_MODULE,
+    COMMON_MODULE2,
     MAX_MODULE
 }debug_module_t;
 
@@ -48,18 +58,18 @@ typedef struct {
 ******************************************************************/
 extern module_debug_t debug_level[MAX_MODULE];
 
-#define LOG(module, level, fmt, ...)                                       \
+#define LOG(module, level, fmt, args...)                                       \
 {                                                                          \
     if (debug_level[module].debug_level >= level) {                        \
-        debug_print(module, level, __func__, __LINE__, fmt, __VA_ARGS__);  \
+        debug_print(module, level, __func__, __LINE__, fmt, ##args);  \
     }                                                                      \
 }
-#define LOGE(fmt, ...) LOG(MAIN_MODULE, DBG_ERR,  fmt, __VA_ARGS__)
-#define LOGW(fmt, ...) LOG(MAIN_MODULE, DBG_WARN, fmt, __VA_ARGS__)
-#define LOGH(fmt, ...) LOG(MAIN_MODULE, DBG_HIGH, fmt, __VA_ARGS__)
-#define LOGD(fmt, ...) LOG(MAIN_MODULE, DBG_DEBUG,fmt, __VA_ARGS__)
-#define LOGL(fmt, ...) LOG(MAIN_MODULE, DBG_LOW,  fmt, __VA_ARGS__)
-#define LOGI(fmt, ...) LOG(MAIN_MODULE, DBG_INFO, fmt, __VA_ARGS__)
+#define LOGE(fmt, args...) LOG(MAIN_MODULE, DBG_ERR,  fmt, ##args)
+#define LOGW(fmt, args...) LOG(MAIN_MODULE, DBG_WARN, fmt, ##args)
+#define LOGH(fmt, args...) LOG(MAIN_MODULE, DBG_HIGH, fmt, ##args)
+#define LOGD(fmt, args...) LOG(MAIN_MODULE, DBG_DEBUG,fmt, ##args)
+#define LOGL(fmt, args...) LOG(MAIN_MODULE, DBG_LOW,  fmt, ##args)
+#define LOGI(fmt, args...) LOG(MAIN_MODULE, DBG_INFO, fmt, ##args)
 
 #define SETLOG(module, level) debug_level_set(module, level)
 
