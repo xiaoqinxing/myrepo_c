@@ -10,10 +10,10 @@
 extern "C" {
 #endif
 
-#define QUEUE_TYPE cmd_type_t
+#define QUEUE_TYPE int
 
 //是否限制队列长度
-#define QUEUE_LIMIT 0
+#define QUEUE_LIMIT 1
 
 //队列默认长度，开启STACK_LIMIT后生效
 #define QUEUE_LIMIT_DEFAULT_LENTH 10
@@ -44,13 +44,13 @@ typedef struct Queue {
     QUEUE_TYPE (*first)(struct Queue *queue_obj);
 }Queue;
 
-char is_queue_full(Queue *queue_obj);
-void set_queue_length(Queue * queue_obj, unsigned int value);
-char is_queue_empty(Queue * queue_obj);
-char enqueue(Queue * queue_obj, QUEUE_TYPE value);
-char QueueEnqueueWithPriority(Queue * queue_obj, QUEUE_TYPE value);
-QUEUE_TYPE dequeue(Queue *queue_obj);
-QUEUE_TYPE first(Queue * queue_obj);
+// char is_queue_full(Queue *queue_obj);
+// void set_queue_length(Queue * queue_obj, unsigned int value);
+// char is_queue_empty(Queue * queue_obj);
+// char enqueue(Queue * queue_obj, QUEUE_TYPE value);
+// char QueueEnqueueWithPriority(Queue * queue_obj, QUEUE_TYPE value);
+// QUEUE_TYPE dequeue(Queue *queue_obj);
+// QUEUE_TYPE first(Queue * queue_obj);
 Queue* create_queue(void);
 void destroy_queue(Queue *queue_obj);
 

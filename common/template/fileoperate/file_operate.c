@@ -3,7 +3,6 @@
 *   功能描述    ：
 *   使用说明    ：
 ******************************************************************/
-#include "pch.h"
 #include "file_operate.h"
 #undef fopen
 #undef fwrite

@@ -39,8 +39,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # gdb debug
 SET(CMAKE_BUILD_TYPE "Debug")  
-SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")  
-SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")  
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb -lpthread")  
+SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall -lpthread")  
 
 add_subdirectory(debug)
 add_subdirectory(apps/hello_world)
+add_subdirectory(apps/datastruct_test)
+add_subdirectory(common)

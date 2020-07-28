@@ -15,11 +15,13 @@
 // #include "camera_dbg.h"
 #include "memleak_dbg.h"
 #include "fdleak_dbg.h"
-#include <errno.h>
+#include "logprint.h"
 
 #define MAX_BACKTRACE_DEPTH 15
-#define MAGIC_ALLOC 0x7abc0fb5
-#define MAGIC_FREE 0x087cbc8a
+// #define MAGIC_ALLOC 0x7abc0fb5
+// #define MAGIC_FREE 0x087cbc8a
+#define MAGIC_ALLOC malloc
+#define MAGIC_FREE free
 
 struct fdlist_t {
   uintptr_t bt[MAX_BACKTRACE_DEPTH];
@@ -89,7 +91,7 @@ extern "C" void fdleak_dump_list()
   pthread_mutex_lock(&fdleak_mut);
   p_map_info = lib_map_create(getpid());
   while (temp != NULL) {
-    CLOGE(CAM_NO_MODULE,"leaked fd %d\n",temp->fd);
+    LOG(LEAK_DEBUG_MODULE, DBG_ERR, "leaked fd %d\n",temp->fd);
     print_backtrace(p_map_info, temp->bt, temp->bt_depth);
     temp = temp->next;
   }
@@ -111,7 +113,7 @@ int __open(const char* dev_name, int flags, ...)
   }
   fd_value = open(dev_name, flags, mode);
   if (errno == EMFILE) {
-    CLOGE(CAM_NO_MODULE, "FATAL during open %s Restart camera daemon !!!",strerror(errno));
+    LOG(LEAK_DEBUG_MODULE, DBG_ERR, "FATAL during open %s",strerror(errno));
     raise(SIGABRT);
     raise(SIGKILL);
   }
@@ -128,7 +130,7 @@ int __pipe(int fd[])
 
   ret_value = pipe(fd);
   if (errno == EMFILE) {
-    CLOGE(CAM_NO_MODULE, "FATAL during pipe creation %s Restart camera daemon !!!",strerror(errno));
+    LOG(LEAK_DEBUG_MODULE, DBG_ERR, "FATAL during pipe creation %s Restart camera daemon !!!",strerror(errno));
     raise(SIGABRT);
     raise(SIGKILL);
   }
@@ -146,7 +148,7 @@ int __socket(int domain, int type, int protocol)
 
   ds_fd = socket(domain, type, protocol);
   if (errno == EMFILE) {
-    CLOGE(CAM_NO_MODULE, "FATAL during socket create %s Restart camera daemon !!!",strerror(errno));
+    LOG(LEAK_DEBUG_MODULE, DBG_ERR, "FATAL during socket create %s Restart camera daemon !!!",strerror(errno));
     raise(SIGABRT);
     raise(SIGKILL);
   }
@@ -163,7 +165,7 @@ void* __mmap(void* addr, size_t size, int prot, int flags, int fd, off_t offset)
 
   ret = mmap(addr, size, prot, flags, fd, offset);
   if (errno == EMFILE) {
-    CLOGE(CAM_NO_MODULE, "FATAL during mmap %s Restart camera daemon !!!",strerror(errno));
+    LOG(LEAK_DEBUG_MODULE, DBG_ERR, "FATAL during mmap %s Restart camera daemon !!!",strerror(errno));
     raise(SIGABRT);
     raise(SIGKILL);
   }
@@ -264,14 +266,14 @@ void dump_fdleak_trace()
     __real_mmap = mmap;
     __real_close = close;
     if (fdleak_count) {
-      CLOGE(CAM_NO_MODULE,"FATAL fdleak found in camera daemon %d",
+      LOG(LEAK_DEBUG_MODULE, DBG_ERR, "FATAL fdleak found in camera daemon %d",
          fdleak_count);
       fdleak_dump_list();
     }
 }
 static __attribute__((destructor)) void finish(void)
 {
-  CLOGH(CAM_NO_MODULE,"fdleak lib deinit.\n");
+  LOG(LEAK_DEBUG_MODULE, DBG_HIGH, "fdleak lib deinit.\n");
   if (fdleak_count)
     fdleak_dump_list();
 }

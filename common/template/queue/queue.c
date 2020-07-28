@@ -3,8 +3,9 @@
 *   功能描述    ：
 *   使用说明    ：
 ******************************************************************/
-#include "pch.h"
 #include "queue.h"
+#include "alloc.h"
+#include "common.h"
 
 /******************************************************************
 @brief   : 判断队列是否为满
@@ -58,7 +59,7 @@ static char enqueue(Queue *queue_obj, QUEUE_TYPE value) {
     QueueNode *new_node;
 #if QUEUE_LIMIT
     if (is_queue_full(queue_obj)) {
-        LOGE("queue is full,enqueue is error");
+        ALOGE("queue is full,enqueue is error");
         return ERR_QUEUE_FULL;
     }
 #endif
@@ -87,7 +88,7 @@ static char QueueEnqueueWithPriority(Queue * queue_obj, QUEUE_TYPE value) {
     QueueNode *new_node;
 #if QUEUE_LIMIT
     if (is_queue_full(queue_obj)) {
-        LOGE("queue is full,enqueue is error");
+        ALOGE("queue is full,enqueue is error");
         return ERR_QUEUE_FULL;
     }
 #endif
@@ -107,10 +108,10 @@ static char QueueEnqueueWithPriority(Queue * queue_obj, QUEUE_TYPE value) {
 @output  ：none
 @detail  : none
 ******************************************************************/
-static QUEUE_TYPE dequeue(Queue *queue_obj) {
+QUEUE_TYPE dequeue(Queue *queue_obj) {
     QueueNode *first_node = queue_obj->front_node;
     if (is_queue_empty(queue_obj)) {
-        LOGE("queue is empty,dequeue is error");
+        ALOGE("queue is empty,dequeue is error");
         return -1;
     }
     QUEUE_TYPE rc = first_node->value;
@@ -135,7 +136,7 @@ static QUEUE_TYPE dequeue(Queue *queue_obj) {
 ******************************************************************/
 static QUEUE_TYPE first(Queue *queue_obj) {
     if (is_queue_empty(queue_obj)) {
-        LOGE("stack is empty,top is null");
+        ALOGE("stack is empty,top is null");
         return -1;
     }
     else

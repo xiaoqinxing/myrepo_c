@@ -7,7 +7,7 @@
 #include <inttypes.h>
 #include <cutils/properties.h>
 
-#include "camera_dbg.h"
+#include "logprint.h"
 #include "memleak_dbg.h"
 
 #define ENABLE_SIG 0
@@ -100,7 +100,7 @@ void print_backtrace(struct map_info_holder *p_map_info, uintptr_t* frames, int 
     if (soname == NULL) {
       soname = "<unknown>";
     }
-    CLOGI(CAM_NO_MODULE, "#%02d  pc %08x  %s (%s) \n", i, (unsigned int)rel_pc, symbol, soname);
+    LOG(LEAK_DEBUG_MODULE,DBG_INFO, "#%02d  pc %08x  %s (%s) \n", i, (unsigned int)rel_pc, symbol, soname);
   }
 }
 
@@ -236,7 +236,7 @@ extern "C" void print_allocated_memory()
   hdr_t *del; int cnt, cnt_all = 0;
   struct map_info_holder *p_map_info;
 
-  CLOGI(CAM_NO_MODULE, "%d bytes non freed memory.\n", leaks_bytes);
+  LOG(LEAK_DEBUG_MODULE, DBG_INFO, "%d bytes non freed memory.\n", leaks_bytes);
   pthread_mutex_lock(&memory_mutex);
 
   p_map_info = lib_map_create(getpid());
@@ -244,7 +244,7 @@ extern "C" void print_allocated_memory()
   while(del) {
     cnt_all++;
 
-    CLOGI(CAM_NO_MODULE, "%d ALLOCATED MEMORY AT %p %d bytes (%d bytes REMAINING)\n",
+    LOG(LEAK_DEBUG_MODULE, DBG_INFO, "%d ALLOCATED MEMORY AT %p %d bytes (%d bytes REMAINING)\n",
         cnt_all, del + 1, del->size, leaks_bytes);
 
 
@@ -290,7 +290,7 @@ void * __malloc(size_t size)
     return hdr + 1;
   }
 
-  CLOGI(CAM_NO_MODULE, "not enough memory.\n");
+  LOG(LEAK_DEBUG_MODULE, DBG_INFO, "not enough memory.\n");
   pthread_mutex_unlock(&memory_mutex);
   return NULL;
 }
@@ -387,13 +387,13 @@ void print_mem(int signum __unused)
 
 void enable_memleak_trace(int signum __unused)
 {
-  CLOGI(CAM_NO_MODULE, "Start memleak tracking.\n");
+  LOG(LEAK_DEBUG_MODULE, DBG_INFO, "Start memleak tracking.\n");
   mem_trace_en = 1;
 }
 
 void disable_memleak_trace(int signum __unused)
 {
-  CLOGI(CAM_NO_MODULE, "Stop memleak tracking.\n");
+  LOG(LEAK_DEBUG_MODULE, DBG_INFO, "Stop memleak tracking.\n");
   mem_trace_en = 0;
 }
 
@@ -412,7 +412,7 @@ static __attribute__((constructor)) void init(void)
   leaks_bytes = 0;
   last = NULL;
 
-  CLOGI(CAM_NO_MODULE, "memleak lib init.\n");
+  LOG(LEAK_DEBUG_MODULE, DBG_INFO, "memleak lib init.\n");
   #if ENABLE_SIG
     signal(SIG_PRINT, print_mem);
     signal(SIG_ENABLE, enable_memleak_trace);
@@ -424,14 +424,14 @@ static __attribute__((constructor)) void init(void)
     __real_calloc = __calloc;
     __real_realloc = __realloc;
     __real_free = __free;
-    CLOGI(CAM_NO_MODULE, "memleak tracer attached");
+    LOG(LEAK_DEBUG_MODULE, DBG_INFO, "memleak tracer attached");
   } else {
   #endif
     __real_malloc = malloc;
     __real_calloc = calloc;
     __real_realloc = realloc;
     __real_free = free;
-    CLOGI(CAM_NO_MODULE, "memleak tracer not attached");
+    LOG(LEAK_DEBUG_MODULE, DBG_INFO, "memleak tracer not attached");
   #ifdef MEMLEAK_FLAG
   }
   #endif
@@ -439,7 +439,7 @@ static __attribute__((constructor)) void init(void)
 
 static __attribute__((destructor)) void finish(void)
 {
-  CLOGI(CAM_NO_MODULE, "memleak lib deinit.\n");
+  LOG(LEAK_DEBUG_MODULE, DBG_INFO, "memleak lib deinit.\n");
   print_allocated_memory();
 }
 
@@ -448,7 +448,7 @@ void * server_memleak_thread (void * param __unused)
   int redo = 1;
 
   server_memleak_event = 0;
-  CLOGI(CAM_NO_MODULE, "CAM_memleak thread started");
+  LOG(LEAK_DEBUG_MODULE, DBG_INFO, "CAM_memleak thread started");
 
   while(redo)
   {
@@ -457,7 +457,7 @@ void * server_memleak_thread (void * param __unused)
     switch(server_memleak_event)
     {
       case PRINT_LEAK_MEMORY:
-        CLOGI(CAM_NO_MODULE, "Print leaked memory.");
+        LOG(LEAK_DEBUG_MODULE, DBG_INFO, "Print leaked memory.");
         disable_memleak_trace(0);
         pthread_mutex_unlock (&server_memleak_mut);
         print_allocated_memory();
@@ -467,10 +467,10 @@ void * server_memleak_thread (void * param __unused)
         pthread_mutex_unlock (&server_memleak_mut);
         break;
       default:
-        CLOGI(CAM_NO_MODULE, "Something bad, should never be printed");
+        LOG(LEAK_DEBUG_MODULE, DBG_INFO, "Something bad, should never be printed");
         pthread_mutex_unlock (&server_memleak_mut);
     }
   }
-  CLOGI(CAM_NO_MODULE, "CAM_memleak thread exit");
+  LOG(LEAK_DEBUG_MODULE, DBG_INFO, "CAM_memleak thread exit");
   pthread_exit(0);
 }

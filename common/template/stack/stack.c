@@ -3,9 +3,9 @@
 *   功能描述    ：
 *   使用说明    ：
 ******************************************************************/
-#include "pch.h"
 #include "stack.h"
-
+#include "common.h"
+#include "alloc.h"
 /******************************************************************
 @brief   : 判断堆栈是否为满
 @author  : xiaoqinxing
@@ -56,7 +56,7 @@ void push(Stack *stack_obj, STACK_TYPE value){
     StackNode *new_node;
 #if STACK_LIMIT
     if (is_stack_full(stack_obj)) {
-        LOGE("stack is full,push is error");
+        ALOGE("stack is full,push is error");
         return;
     }
 #endif
@@ -79,7 +79,7 @@ void push(Stack *stack_obj, STACK_TYPE value){
 STACK_TYPE pop(Stack *stack_obj) {
     StackNode *first_node = stack_obj->node;
     if (is_stack_empty(stack_obj)) {
-        LOGE("stack is empty,pop is error");
+        ALOGE("stack is empty,pop is error");
         return -1;
     }
     STACK_TYPE rc = first_node->value;
@@ -100,7 +100,7 @@ STACK_TYPE pop(Stack *stack_obj) {
 ******************************************************************/
 STACK_TYPE top(Stack *stack_obj) {
     if (is_stack_empty(stack_obj)) {
-        LOGE("stack is empty,top is null");
+        ALOGE("stack is empty,top is null");
         return -1;
     }
     else

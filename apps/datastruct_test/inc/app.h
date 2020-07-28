@@ -13,6 +13,8 @@ extern "C" {
 #include "invendor.h"
 #include "stack.h"
 #include "queue.h"
+#include "file_operate.h"
+#include "common.h"
 
 void test1_mem_alloc();
 void test2_log_func();

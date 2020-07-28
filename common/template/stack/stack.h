@@ -13,7 +13,7 @@ extern "C" {
 #define STACK_TYPE int
 
 //是否限制堆栈长度
-#define STACK_LIMIT 0
+#define STACK_LIMIT 1
 
 //堆栈默认长度，开启STACK_LIMIT后生效
 #define STACK_LIMIT_DEFAULT_LENTH 10
@@ -50,7 +50,7 @@ typedef struct Stack {
 #if STACK_LIMIT
     STACK_PRIVATE stack_private;
     char(*is_full)(struct Stack *stack_obj);
-    void(*set_length)(struct Stack *stack_obj);
+    void(*set_length)(struct Stack *stack_obj, unsigned int value);
 #endif
     char(*is_empty)(struct Stack *stack_obj);
     void(*push)(struct Stack *stack_obj, STACK_TYPE value);
@@ -59,12 +59,12 @@ typedef struct Stack {
 }Stack;
 #endif
 
-char is_stack_full(struct Stack *stack_obj);
-void set_stack_length(struct Stack *stack_obj, unsigned int value);
-char is_stack_empty(Stack * stack_obj);
-void push(Stack * stack_obj, STACK_TYPE value);
-STACK_TYPE pop(Stack * stack_obj);
-STACK_TYPE top(Stack * stack_obj);
+// char is_stack_full(struct Stack *stack_obj);
+// void set_stack_length(struct Stack *stack_obj, unsigned int value);
+// char is_stack_empty(Stack * stack_obj);
+// void push(Stack * stack_obj, STACK_TYPE value);
+// STACK_TYPE pop(Stack * stack_obj);
+// STACK_TYPE top(Stack * stack_obj);
 Stack* create_stack(void);
 void destroy_stack(Stack *stack_obj);
 

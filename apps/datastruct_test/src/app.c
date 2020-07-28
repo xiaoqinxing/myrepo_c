@@ -3,12 +3,13 @@
 *   功能描述    ：功能函数实例
 *   使用说明    ：
 ******************************************************************/
-#include "pch.h"
 #include "app.h"
 #include "pthread.h"
+#include "logprint.h"
+#include "alloc.h"
 
 void test1_mem_alloc() {
-    LOGE("测试程序");
+    ALOGE("测试程序");
     Invrec *a;
     /*
     **注意了，由于动态分配的内存需要释放，如果将这个指针进行了运算
@@ -39,19 +40,19 @@ void test1_mem_alloc() {
 }
 
 void test2_log_func() {
-    LOGE("测试程序");
+    ALOGE("测试程序");
     version_print();
-    LOGE("OK");
-    LOGD("%s", "hello");
+    ALOGE("OK");
+    ALOGD("%s", "hello");
     SETLOG(MAIN_MODULE, DBG_DEBUG);
-    LOGD("%s", "hello2");
-    LOGI("%s", "DSFASDJKHFKL ASHJDLFIHKSDFDSLKAJFKLJASDLKJFK");
+    ALOGD("%s", "hello2");
+    ALOGI("%s", "DSFASDJKHFKL ASHJDLFIHKSDFDSLKAJFKLJASDLKJFK");
     uint32_t a = 10, b = 11;
     //由于a和b都是无符号整数，相减之后还是无符号整数，肯定是大于等于0的
     //因此这个地方是有问题的，需要注意，最好写成if(a>b)
     if (a - b >= 0)
-        LOGE("a = %d,b = %d,但a - b却判断为 > 0", a, b);
-    LOGE("如果直接对a-b打印：%d，但是", a - b);
+        ALOGE("a = %d,b = %d,但a - b却判断为 > 0", a, b);
+    ALOGE("如果直接对a-b打印：%d，但是", a - b);
 }
 
 /******************************************************************
@@ -76,12 +77,12 @@ static int MyDoubleTest(BufferContext *pBuf) {
 }
 
 void test3_mem_templet_func() {
-    LOGE("测试程序");
+    ALOGE("测试程序");
     int p;
     IntBufferContext membuffer = {{ NULL,sizeof(int),MyDoubleTest }, 0};
     //注意这里传入的是IntBufferContext
     MemBuffer(&membuffer);
-    LOGE("%d", membuffer.rc);
+    ALOGE("%d", membuffer.rc);
 }
 
 /******************************************************************
@@ -107,12 +108,12 @@ static long file_size(FileAccessorContext *p, FILE *fp) {
 
 void test4_size_read_func() {
     char filename[50];
-    LOGE("测试程序");
-    LOGE("请输入文件名：");
+    ALOGE("测试程序");
+    ALOGE("请输入文件名：");
     scanf_s("%s", filename, 50);
     SizeGetContext ctx = { {filename,"rb",file_size},0 };
     if (!FileAccess(&ctx)) {
-        LOGE("文件长度为%d个字节", ctx.size);
+        ALOGE("文件长度为%d个字节", ctx.size);
     }
     else
         perror("ERROR:");
@@ -126,20 +127,20 @@ void test4_size_read_func() {
 ******************************************************************/
 void test5_stack_func() {
     Stack *tmp = create_stack();
-    LOGE("创建一个堆栈，并判断是否为空-%d", tmp->is_empty(tmp));
+    ALOGE("创建一个堆栈，并判断是否为空-%d", tmp->is_empty(tmp));
     tmp->set_length(tmp, 3);
-    LOGE("设置堆栈长度为3");
+    ALOGE("设置堆栈长度为3");
     for (int j = 0; j < 2; j++) {
         for (int i = 0; i < 6; i++) {
             tmp->push(tmp, i);
-            LOGE("after push,top is %d", tmp->top(tmp));
+            ALOGE("after push,top is %d", tmp->top(tmp));
         }
         for (int i = 0; i < 5; i++) {
-            LOGE("pop time:%d value = %d", i + 1, tmp->pop(tmp));
+            ALOGE("pop time:%d value = %d", i + 1, tmp->pop(tmp));
         }
     }
     destroy_stack(tmp);
-    LOGE("销毁堆栈后堆栈指针为%p", tmp);
+    ALOGE("销毁堆栈后堆栈指针为%p", tmp);
 }
 /******************************************************************
 @brief   : 单链表实现队列
@@ -150,20 +151,20 @@ void test5_stack_func() {
 ******************************************************************/
 void test6_queue_func() {
     Queue *tmp = create_queue();
-    LOGE("创建一个队列，并判断是否为空-%d", tmp->is_empty(tmp));
+    ALOGE("创建一个队列，并判断是否为空-%d", tmp->is_empty(tmp));
     tmp->set_length(tmp, 5);
-    LOGE("设置队列长度为5");
+    ALOGE("设置队列长度为5");
     for (int j = 0; j < 2; j++) {
         for (int i = 0; i < 10; i++) {
-            LOGE("enqueue:%d", i);
+            ALOGE("enqueue:%d", i);
             tmp->enqueue(tmp, i);
         }
         for (int i = 0; i < 8; i++) {
-            LOGE("dequeue time:%d value = %d", i + 1, tmp->dequeue(tmp));
+            ALOGE("dequeue time:%d value = %d", i + 1, tmp->dequeue(tmp));
         }
     }
     destroy_queue(tmp);
-    LOGE("销毁队列后队列指针为%p", tmp);
+    ALOGE("销毁队列后队列指针为%p", tmp);
 }
 /******************************************************************
 @brief   : 文件拷贝模板实例

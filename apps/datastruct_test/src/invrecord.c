@@ -1,9 +1,8 @@
 /*
 **用于创建SUBASSEMBLY存货纪录的函数
 */
-#include "pch.h"
 #include "invendor.h"
-
+#include "alloc.h"
 //创建存货信息
 Invrec *create_subassy_record(int n_parts) {
 	Invrec *new_rec;

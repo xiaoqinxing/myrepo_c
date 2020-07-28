@@ -11,10 +11,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "stdio.h"
 #define fopen  
 #define fwrite
-#define FILE_SAFE_FUNCTION 1
+#define FILE_SAFE_FUNCTION 0
 
 /******************************************************************
 @brief   : 文件操作模板结构体
