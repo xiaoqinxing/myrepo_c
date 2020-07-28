@@ -29,9 +29,19 @@
                     }
                 ]
             },
-            "windows": { //windows的特定配置
-                "type": "cppvsdbg", //指定使用msvc进行调试
-                "program": "${workspaceFolder}/build/${workspaceFolderBasename}.exe", //指定C/C++程序位置
+            // "windows": { //windows的特定配置
+            //     "type": "cppvsdbg", //指定使用msvc进行调试
+            //     "program": "${workspaceFolder}/build/${workspaceFolderBasename}.exe", //指定C/C++程序位置
+            // }
+            "windows": {		// 下面是Windows平台下，需要配置的参数
+                "MIMode": "gdb",		// VSCode要使用的调试工具
+                "miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe",		// miDebugger的路径，该值必须设置。尽管会自动搜索
+                "program": "${workspaceFolder}/build/apps/${fileBasenameNoExtension}/${fileBasenameNoExtension}.exe", //指定C/C++程序位置
+                "setupCommands": [{
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }]
             }
         }
     ]

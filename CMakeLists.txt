@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
+# set compiler path
+set(CMAKE_C_COMPILER gcc)
+set(CMAKE_CXX_COMPILER g++)
+
 project(repo_c)
 
 # specify the C++ standard

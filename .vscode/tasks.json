@@ -28,6 +28,7 @@
         { // 在build文件夹中调用cmake进行项目配置
             // 除windows系统外执行的命令为`cmake -DCMAKE_BUILD_TYPE=<Debug|Release|RelWithDebInfo|MinSizeRel> ../`
             // windows系统是在visual stuido的环境中执行命令`cmake -DCMAKE_BUILD_TYPE=<Debug|Release|RelWithDebInfo|MinSizeRel>  ../ -G "CodeBlocks - NMake Makefiles"`
+            //本例程使用的是MinGW
             "label": "cmake",
             "type": "shell",
             "command": "cmake",
@@ -45,18 +46,20 @@
                     "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
                     "../",
                     "-G",
-                    "\"CodeBlocks - NMake Makefiles\""
+                    // "\"CodeBlocks - NMake Makefiles\""
+                    "MinGW Makefiles"
                 ],
                 "options": {
                     "shell": {
                         // "executable": "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat",
                         // 需要根据安装的vs版本调用vs工具命令提示符
-                        "executable": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat",
-                        "args": [
-                            "${input:PLATFORM}", //指定平台
-                            "-vcvars_ver=${input:vcvars_ver}", //指定vc环境版本
-                            "&&"
-                        ]
+                        // "executable": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat",
+                        "executable": "powershell.exe",
+                        // "args": [
+                        //     "${input:PLATFORM}", //指定平台
+                        //     "-vcvars_ver=${input:vcvars_ver}", //指定vc环境版本
+                        //     "&&"
+                        // ]
                     }
                 },
             },
@@ -82,20 +85,21 @@
                 "cwd": "${workspaceFolder}/build",
             },
             "problemMatcher": "$gcc",
-            "windows": {
-                "options": {
-                    "shell": {
-                        // "executable": "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat",
-                        "executable": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat",
-                        "args": [
-                            "${input:PLATFORM}",
-                            "-vcvars_ver=${input:vcvars_ver}",
-                            "&&"
-                        ]
-                    }
-                },
-                "problemMatcher": "$msCompile"
-            },
+            // "windows": {
+            //     "options": {
+            //         "shell": {
+            //             // "executable": "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat",
+            //             // "executable": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat",
+            //             "executable": "powershell.exe",
+            //             "args": [
+            //                 "${input:PLATFORM}",
+            //                 "-vcvars_ver=${input:vcvars_ver}",
+            //                 "&&"
+            //             ]
+            //         }
+            //     },
+            //     "problemMatcher": "$msCompile"
+            // },
             "dependsOn": [
                 "cmake" // 在task `cmake` 后执行该task
             ]
@@ -129,16 +133,17 @@
             ],
             "default": "amd64"
         },
-        {
-            "id": "vcvars_ver",
-            "type": "pickString",
-            "description": "What vcvars_ver do you want to create?",
-            "options": [
-                "14.2", // 2019
-                "14.1", // 2017
-                "14.0", // 2015
-            ],
-            "default": "14.2"
-        }
+        //设置vcvars的版本号，用mingw的话，用不到
+        // {
+        //     "id": "vcvars_ver",
+        //     "type": "pickString",
+        //     "description": "What vcvars_ver do you want to create?",
+        //     "options": [
+        //         "14.2", // 2019
+        //         "14.1", // 2017
+        //         "14.0", // 2015
+        //     ],
+        //     "default": "14.2"
+        // }
     ]
 }
