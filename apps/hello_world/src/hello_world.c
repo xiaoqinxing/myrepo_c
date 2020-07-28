@@ -1,10 +1,10 @@
 #include "stdio.h"
 #include "logprint.h"
-#include "version.h"
 void main()
 {
-    LOGE("hello world %s\n", "haha");
-    LOGE("OK");
+    LOGE(MAIN_MODULE, "hello world %s", "haha");
+    LOGE(LEAK_DEBUG_MODULE, "OK");
+    ALOGH("let's printf some log");
     version_print();
     printf("hello world\n");
     return;

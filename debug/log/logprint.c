@@ -65,3 +65,24 @@ void debug_print(const debug_module_t module, const debug_level_t level,
     printf("%s %s [%s] %d: %s\n",
            debug_level[module].name, level_to_str[level], func, line, log_buffer);
 }
+/******************************************************************
+@brief   : 版本信息打印
+@author  : xiaoqinxing
+@input   ：模块，打印等级，字符串
+@output  ：none
+@detail  : none
+******************************************************************/
+void version_print(void)
+{
+    printf("***********************************\n");
+    #ifdef COMMIT_HASH
+    printf("Version: %s\n",COMMIT_HASH);
+    #endif
+    #ifdef BRANCH_NAME
+    printf("Branch name: %s\n",BRANCH_NAME);
+    #endif
+    #ifdef BUILD_TIMESTAMP
+    printf("Compiler time: %s\n",BUILD_TIMESTAMP);
+    #endif
+    printf("***********************************\n");
+}

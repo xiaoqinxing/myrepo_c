@@ -36,7 +36,7 @@ static const char *level_to_str[] = {
 typedef enum {
     MAIN_MODULE = 0,
     LEAK_DEBUG_MODULE,
-    COMMON_MODULE2,
+    COMMON_MODULE,
     MAX_MODULE
 }debug_module_t;
 
@@ -64,16 +64,24 @@ extern module_debug_t debug_level[MAX_MODULE];
         debug_print(module, level, __func__, __LINE__, fmt, ##args);  \
     }                                                                      \
 }
-#define LOGE(fmt, args...) LOG(MAIN_MODULE, DBG_ERR,  fmt, ##args)
-#define LOGW(fmt, args...) LOG(MAIN_MODULE, DBG_WARN, fmt, ##args)
-#define LOGH(fmt, args...) LOG(MAIN_MODULE, DBG_HIGH, fmt, ##args)
-#define LOGD(fmt, args...) LOG(MAIN_MODULE, DBG_DEBUG,fmt, ##args)
-#define LOGL(fmt, args...) LOG(MAIN_MODULE, DBG_LOW,  fmt, ##args)
-#define LOGI(fmt, args...) LOG(MAIN_MODULE, DBG_INFO, fmt, ##args)
+#define LOGE(module, fmt, args...) LOG(module, DBG_ERR,  fmt, ##args)
+#define LOGW(module, fmt, args...) LOG(module, DBG_WARN, fmt, ##args)
+#define LOGH(module, fmt, args...) LOG(module, DBG_HIGH, fmt, ##args)
+#define LOGD(module, fmt, args...) LOG(module, DBG_DEBUG,fmt, ##args)
+#define LOGL(module, fmt, args...) LOG(module, DBG_LOW,  fmt, ##args)
+#define LOGI(module, fmt, args...) LOG(module, DBG_INFO, fmt, ##args)
+
+#define ALOGE(fmt, args...) LOG(MAIN_MODULE, DBG_ERR,  fmt, ##args)
+#define ALOGW(fmt, args...) LOG(MAIN_MODULE, DBG_WARN, fmt, ##args)
+#define ALOGH(fmt, args...) LOG(MAIN_MODULE, DBG_HIGH, fmt, ##args)
+#define ALOGD(fmt, args...) LOG(MAIN_MODULE, DBG_DEBUG,fmt, ##args)
+#define ALOGL(fmt, args...) LOG(MAIN_MODULE, DBG_LOW,  fmt, ##args)
+#define ALOGI(fmt, args...) LOG(MAIN_MODULE, DBG_INFO, fmt, ##args)
 
 #define SETLOG(module, level) debug_level_set(module, level)
 
 void debug_level_set(debug_module_t module, debug_level_t level);
+void version_print(void);
 
 #ifdef __cplusplus
 }
