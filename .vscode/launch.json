@@ -35,7 +35,7 @@
             // }
             "windows": {		// 下面是Windows平台下，需要配置的参数
                 "MIMode": "gdb",		// VSCode要使用的调试工具
-                "miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe",		// miDebugger的路径，该值必须设置。尽管会自动搜索
+                "miDebuggerPath": "C:\\install_pack\\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\\mingw64\\bin",		// miDebugger的路径，该值必须设置。尽管会自动搜索
                 "program": "${workspaceFolder}/build/apps/${fileBasenameNoExtension}/${fileBasenameNoExtension}.exe", //指定C/C++程序位置
                 "setupCommands": [{
                     "description": "Enable pretty-printing for gdb",

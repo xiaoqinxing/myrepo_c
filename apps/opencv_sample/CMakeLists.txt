@@ -2,8 +2,7 @@
 project(opencv_sample)
 message("====================================================")
 message(STATUS "build app: " ${PROJECT_NAME})
-
-
+ 
 # TODO: set source file (c/cpp)
 set(SOURCES 
     ${PROJECT_SOURCE_DIR}/src/opencv_sample.cpp
@@ -17,17 +16,12 @@ message(STATUS "BUILD EXE: " ${EXECUTABLE_OUTPUT_PATH} "/" ${PROJECT_NAME})
 # Add an executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-find_package (quserex)
-if(quserex_FOUND)
-target_link_libraries(${PROJECT_NAME}
-    ${quserex_LIBS}
-)
-else(quserex_FOUND)
-    message(FATAL_ERROR "Threads library not found")
-endif(quserex_FOUND)
-
 # set(OpenCV_DIR C:\\install_pack\\opencv\\build\\x64\\vc14\\lib) 
-set(OpenCV_DIR C:\\opencv\\opencv\\build\\x64\\vc15\\lib) 
+if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+    # set(OpenCV_DIR C:\\opencv\\opencv\\build\\x64\\vc15\\lib)
+    set(OpenCV_DIR C:\\opencv\\opencv\\sources\\build\\install\\x64\\mingw\\lib)
+endif()
+
 find_package( OpenCV REQUIRED )
 if(OpenCV_FOUND)
     message(STATUS "OpenCV library has found")
