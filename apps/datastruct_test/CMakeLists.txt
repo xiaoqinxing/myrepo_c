@@ -1,5 +1,6 @@
 # TODO: Set the project name
 project(datastruct_test)
+message("====================================================")
 message(STATUS "build app: " ${PROJECT_NAME})
 # add version
 # configure_file(config.h.in config.h)

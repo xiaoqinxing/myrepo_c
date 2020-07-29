@@ -1,12 +1,12 @@
 # TODO: Set the project name
 project(opencv_sample)
+message("====================================================")
 message(STATUS "build app: " ${PROJECT_NAME})
 
-find_package( OpenCV REQUIRED )
 
 # TODO: set source file (c/cpp)
 set(SOURCES 
-    ${PROJECT_SOURCE_DIR}/src/opencv_sample.c
+    ${PROJECT_SOURCE_DIR}/src/opencv_sample.cpp
 )
 message(STATUS "SRC FILES: " ${SOURCES})
 
@@ -17,14 +17,24 @@ message(STATUS "BUILD EXE: " ${EXECUTABLE_OUTPUT_PATH} "/" ${PROJECT_NAME})
 # Add an executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
+find_package (quserex)
+if(quserex_FOUND)
 target_link_libraries(${PROJECT_NAME}
-    libdebug
-    ${OpenCV_LIBS}
+    ${quserex_LIBS}
 )
+else(quserex_FOUND)
+    message(FATAL_ERROR "Threads library not found")
+endif(quserex_FOUND)
 
+# set(OpenCV_DIR C:\\install_pack\\opencv\\build\\x64\\vc14\\lib) 
+set(OpenCV_DIR C:\\opencv\\opencv\\build\\x64\\vc15\\lib) 
+find_package( OpenCV REQUIRED )
 if(OpenCV_FOUND)
-    target_include_directories(${PROJECT_NAME} PRIVATE ${OpenCV_INCLUDE_DIR})
-    target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBRARY})
+    message(STATUS "OpenCV library has found")
+    message(STATUS "OpenCV_INCLUDE_DIR: " ${OpenCV_INCLUDE_DIRS})
+    message(STATUS "OpenCV_LIBRARY: " ${OpenCV_LIBS})
+    target_include_directories(${PROJECT_NAME} PRIVATE ${OpenCV_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 else(OpenCV_FOUND)
-    message(FATAL_ERROR ”OpenCV library not found”)
+    message(FATAL_ERROR "OpenCV library not found")
 endif(OpenCV_FOUND)

@@ -112,7 +112,7 @@ bool Socket::accept(Socket &new_socket) const
     new_socket.m_sock = ::accept(m_sock, (sockaddr *) &m_addr, (socklen_t *) &addr_length);
 
     if (new_socket.m_sock <= 0) {
-        MMCAM_LOGE("Socket accept error: %s, errno:%d", strerror(errno), errno );
+        ALOGE("Socket accept error: %s, errno:%d", strerror(errno), errno );
         return false;
     }
 
@@ -135,11 +135,11 @@ bool Socket::send(const string &s, size_t size) const
     do {
         status = ::send (m_sock, ptr, size - sent_size, MSG_NOSIGNAL);
 
-        MMCAM_LOGV("%d: Send size: %d", m_sock, status);
+        ALOGV("%d: Send size: %d", m_sock, status);
 
         if ( status == -1 ) {
             if ((errno != EAGAIN) && (errno != EWOULDBLOCK)) {
-                MMCAM_LOGE("Socket send error: %s", strerror(errno));
+                ALOGE("Socket send error: %s", strerror(errno));
                 rc = false;
                 break;
             }
@@ -176,7 +176,7 @@ bool Socket::recv(string &s, size_t size) const
 
         if (status == -1) {
             if ((errno != EAGAIN) && (errno != EWOULDBLOCK)) {
-                MMCAM_LOGE("Socket receive error: %s", strerror(errno));
+                ALOGE("Socket receive error: %s", strerror(errno));
                 rc = false;
                 break;
             }
@@ -184,7 +184,7 @@ bool Socket::recv(string &s, size_t size) const
             nanosleep(&tim , &tim2);
 
         } else if (status == 0) {
-            MMCAM_LOGI("Socket received zero size data: Client terminated connection");
+            ALOGI("Socket received zero size data: Client terminated connection");
             rc = false;
             break;
 
@@ -195,7 +195,7 @@ bool Socket::recv(string &s, size_t size) const
 
     } while (recv_size < size);
 
-    MMCAM_LOGV("Exiting recv: last size: %zu: Total size: %zu", status, size);
+    ALOGV("Exiting recv: last size: %zu: Total size: %zu", status, size);
 
     delete [] buf;
 
@@ -243,7 +243,7 @@ void ServerSocket::SetupEpoll(int pipefd)
 {
     m_pipefd = pipefd;
     Socket::set_non_blocking (true);
-
+    //由于本程序只用到了一个epoll_event，这里不写1，而写sizeof(epoll_event)，是否有问题
     m_efd = epoll_create(sizeof(epoll_event));
 
     struct epoll_event event;
@@ -264,12 +264,12 @@ ServerSocket::ServerSocket(unsigned short port, int pipefd)
     if (port) {
         rc = Socket::bind(port);
         if (rc != true)
-            MMCAM_LOGE("Could not bind to port: %s", strerror(errno));
+            ALOGE("Could not bind to port: %s", strerror(errno));
     }
 
     rc = Socket::listen();
     if (rc != true)
-        MMCAM_LOGE("Could not listen to socket: %s", strerror(errno));
+        ALOGE("Could not listen to socket: %s", strerror(errno));
 
     if (pipefd >= 0) {
         SetupEpoll(pipefd);
@@ -301,7 +301,7 @@ int ServerSocket::accept ( ServerSocket &sock, bool &pipe_event)
 
             /* An error has occured on this fd, or the socket is not
             ready for reading (why were we notified then?) */
-            MMCAM_LOGW("epoll error :%s. Event: %x \n",  strerror(errno), event.events);
+            ALOGW("epoll error :%s. Event: %x \n",  strerror(errno), event.events);
             rc = -1;
 
             if (m_pipefd == event.data.fd)
@@ -311,13 +311,13 @@ int ServerSocket::accept ( ServerSocket &sock, bool &pipe_event)
 
         } else if (m_pipefd == event.data.fd) {
             pipe_event = true;
-            MMCAM_LOGW("Received event from non socket fd");
+            ALOGW("Received event from non socket fd");
             goto end;
         }
     }
 
     if ( ! Socket::accept (sock) ) {
-        MMCAM_LOGE("Could not accept socket.");
+        ALOGE("Could not accept socket.");
         rc = -1;
     } else {
         // If server socket was in non blocking mode,
@@ -351,7 +351,7 @@ bool ServerSocket::recv(string &s, size_t size, bool &pipe_event, uint32_t pipe_
 
             /* An error has occured on this fd, or the socket is not
             ready for reading (why were we notified then?) */
-            MMCAM_LOGW("epoll Event (%d), fd(%d)", event.events, event.data.fd);
+            ALOGW("epoll Event (%d), fd(%d)", event.events, event.data.fd);
 
             if (m_pipefd == event.data.fd)
                 pipe_event = true;
@@ -361,7 +361,7 @@ bool ServerSocket::recv(string &s, size_t size, bool &pipe_event, uint32_t pipe_
         } else if (m_pipefd == event.data.fd) {
             char *buf = new char[pipe_msg_size+1];
             pipe_event = true;
-            MMCAM_LOGW("Received event from non socket fd");
+            ALOGW("Received event from non socket fd");
 
             //clear receive string before adding new data
             s.clear();
@@ -370,7 +370,7 @@ bool ServerSocket::recv(string &s, size_t size, bool &pipe_event, uint32_t pipe_
 
             if ((read_bytes < 0) ||
                 (read_bytes != (int32_t)pipe_msg_size)) {
-              MMCAM_LOGE("failed: read_bytes %d", read_bytes);
+              ALOGE("failed: read_bytes %d", read_bytes);
             } else {
                 s.append(buf, read_bytes);
             }

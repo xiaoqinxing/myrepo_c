@@ -1,5 +1,5 @@
 project(libdebug)
-
+message("====================================================")
 add_library(${PROJECT_NAME}
         # ${LIB_ROOT_PATH}/fdleak/fdleak_dbg.cpp
         ${PROJECT_SOURCE_DIR}/log/logprint.c

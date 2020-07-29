@@ -1,4 +1,5 @@
 project(libcommon) 
+message("====================================================")
 add_library(${PROJECT_NAME}
         ${PROJECT_SOURCE_DIR}/template/fileoperate/file_operate.c
         ${PROJECT_SOURCE_DIR}/template/memalloc/alloc.c
