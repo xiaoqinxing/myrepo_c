@@ -1,52 +1,39 @@
-/* Copyright (c) 2012-2016, The Linux Foundation. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above
- *       copyright notice, this list of conditions and the following
- *       disclaimer in the documentation and/or other materials provided
- *       with the distribution.
- *     * Neither the name of The Linux Foundation nor the names of its
- *       contributors may be used to endorse or promote products derived
- *       from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
- * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
- * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
- * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- */
-
-#ifndef __QCAMERA_QUEUE_H__
-#define __QCAMERA_QUEUE_H__
-
-// System dependencies
-#include <pthread.h>
-
+/******************************************************************
+*   作    者    ：xiaoqinxing
+*   功能描述    ：提供一个稳定的，可以用作消息队列的数据结构，考虑了多线程的影响
+*   使用说明    ：参考高通代码
+******************************************************************/
+#ifndef __QUEUE_UTILS_H__
+#define __QUEUE_UTILS_H__
+#include "pthread.h"
 // Camera dependencies
-#include "cam_list.h"
-
-namespace qcamera {
-
+#include "list_utils.h"
+/**
+ * 自定义查找队列中是否有数据匹配的函数
+ * 用于仅刷新特定节点，或者仅dequeue特定节点
+ */
 typedef bool (*match_fn_data)(void *data, void *user_data, void *match_data);
+
+/**
+ * 内存释放函数回调
+ * 将data进行释放的回调函数
+ * user_data一般是进行函数调用的(可选)
+ */
 typedef void (*release_data_fn)(void* data, void *user_data);
+
+/**
+ * 匹配函数回调
+ * 判断*data以及*user_data是否和某个特定的数匹配
+ * 仅用于刷新特定节点上
+ */
 typedef bool (*match_fn)(void *data, void *user_data);
 
-class QCameraQueue {
+class QueueUtils {
 public:
-    QCameraQueue();
-    QCameraQueue(release_data_fn data_rel_fn, void *user_data);
-    virtual ~QCameraQueue();
+    QueueUtils();
+    //这个用户数据有什么用？
+    QueueUtils(release_data_fn data_rel_fn, void *user_data);
+    virtual ~QueueUtils();
     void init();
     bool enqueue(void *data);
     bool enqueueWithPriority(void *data);
@@ -55,6 +42,7 @@ public:
     void flush();
     void flushNodes(match_fn match);
     void flushNodes(match_fn_data match, void *spec_data);
+    //需要注意dequeue的时候输出的是个指针，如果那个值被销毁了就很危险，或者被篡改了就不是原来的值了
     void* dequeue(bool bFromHead = true);
     void* dequeue(match_fn_data match, void *spec_data);
     void* peek();
@@ -62,7 +50,7 @@ public:
     int getCurrentSize() {return m_size;}
 private:
     typedef struct {
-        struct cam_list list;
+        struct list_utils list;
         void* data;
     } camera_q_node;
 
@@ -73,7 +61,5 @@ private:
     release_data_fn m_dataFn;
     void * m_userData;
 };
-
-}; // namespace qcamera
 
 #endif /* __QCAMERA_QUEUE_H__ */

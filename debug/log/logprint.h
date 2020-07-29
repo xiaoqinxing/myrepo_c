@@ -79,7 +79,8 @@ extern module_debug_t debug_level[MAX_MODULE];
 #define ALOGI(fmt, args...) LOG(MAIN_MODULE, DBG_INFO, fmt, ##args)
 
 #define SETLOG(module, level) debug_level_set(module, level)
-
+void debug_print(const debug_module_t module, const debug_level_t level,
+                 const char *func, const int line, const char *format, ...);
 void debug_level_set(debug_module_t module, debug_level_t level);
 void version_print(void);
 

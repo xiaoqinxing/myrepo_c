@@ -29,30 +29,24 @@
 
 // System dependencies
 #include <string.h>
-#include <utils/Errors.h>
 
 // Camera dependencies
-#include "QCameraQueue.h"
-
-extern "C" {
-#include "mm_camera_dbg.h"
-}
-
-namespace qcamera {
+#include "queue_utils.h"
+#include "logprint.h"
 
 /*===========================================================================
- * FUNCTION   : QCameraQueue
+ * FUNCTION   : QueueUtils
  *
- * DESCRIPTION: default constructor of QCameraQueue
+ * DESCRIPTION: default constructor of QueueUtils
  *
  * PARAMETERS : None
  *
  * RETURN     : None
  *==========================================================================*/
-QCameraQueue::QCameraQueue()
+QueueUtils::QueueUtils()
 {
     pthread_mutex_init(&m_lock, NULL);
-    cam_list_init(&m_head.list);
+    list_init(&m_head.list);
     m_size = 0;
     m_dataFn = NULL;
     m_userData = NULL;
@@ -60,9 +54,9 @@ QCameraQueue::QCameraQueue()
 }
 
 /*===========================================================================
- * FUNCTION   : QCameraQueue
+ * FUNCTION   : QueueUtils
  *
- * DESCRIPTION: constructor of QCameraQueue
+ * DESCRIPTION: constructor of QueueUtils
  *
  * PARAMETERS :
  *   @data_rel_fn : function ptr to release node data internal resource
@@ -70,10 +64,10 @@ QCameraQueue::QCameraQueue()
  *
  * RETURN     : None
  *==========================================================================*/
-QCameraQueue::QCameraQueue(release_data_fn data_rel_fn, void *user_data)
+QueueUtils::QueueUtils(release_data_fn data_rel_fn, void *user_data)
 {
     pthread_mutex_init(&m_lock, NULL);
-    cam_list_init(&m_head.list);
+    list_init(&m_head.list);
     m_size = 0;
     m_dataFn = data_rel_fn;
     m_userData = user_data;
@@ -81,15 +75,15 @@ QCameraQueue::QCameraQueue(release_data_fn data_rel_fn, void *user_data)
 }
 
 /*===========================================================================
- * FUNCTION   : ~QCameraQueue
+ * FUNCTION   : ~QueueUtils
  *
- * DESCRIPTION: deconstructor of QCameraQueue
+ * DESCRIPTION: deconstructor of QueueUtils
  *
  * PARAMETERS : None
  *
  * RETURN     : None
  *==========================================================================*/
-QCameraQueue::~QCameraQueue()
+QueueUtils::~QueueUtils()
 {
     flush();
     pthread_mutex_destroy(&m_lock);
@@ -104,7 +98,7 @@ QCameraQueue::~QCameraQueue()
  *
  * RETURN     : None
  *==========================================================================*/
-void QCameraQueue::init()
+void QueueUtils::init()
 {
     pthread_mutex_lock(&m_lock);
     m_active = true;
@@ -120,7 +114,7 @@ void QCameraQueue::init()
  *
  * RETURN     : true -- queue is empty; false -- not empty
  *==========================================================================*/
-bool QCameraQueue::isEmpty()
+bool QueueUtils::isEmpty()
 {
     bool flag = true;
     pthread_mutex_lock(&m_lock);
@@ -141,13 +135,13 @@ bool QCameraQueue::isEmpty()
  *
  * RETURN     : true -- success; false -- failed
  *==========================================================================*/
-bool QCameraQueue::enqueue(void *data)
+bool QueueUtils::enqueue(void *data)
 {
     bool rc;
     camera_q_node *node =
         (camera_q_node *)malloc(sizeof(camera_q_node));
     if (NULL == node) {
-        LOGE("No memory for camera_q_node");
+        ALOGE("No memory for camera_q_node");
         return false;
     }
 
@@ -156,7 +150,7 @@ bool QCameraQueue::enqueue(void *data)
 
     pthread_mutex_lock(&m_lock);
     if (m_active) {
-        cam_list_add_tail_node(&node->list, &m_head.list);
+        list_add_tail_node(&node->list, &m_head.list);
         m_size++;
         rc = true;
     } else {
@@ -178,13 +172,13 @@ bool QCameraQueue::enqueue(void *data)
  *
  * RETURN     : true -- success; false -- failed
  *==========================================================================*/
-bool QCameraQueue::enqueueWithPriority(void *data)
+bool QueueUtils::enqueueWithPriority(void *data)
 {
     bool rc;
     camera_q_node *node =
         (camera_q_node *)malloc(sizeof(camera_q_node));
     if (NULL == node) {
-        LOGE("No memory for camera_q_node");
+        ALOGE("No memory for camera_q_node");
         return false;
     }
 
@@ -193,7 +187,7 @@ bool QCameraQueue::enqueueWithPriority(void *data)
 
     pthread_mutex_lock(&m_lock);
     if (m_active) {
-        struct cam_list *p_next = m_head.list.next;
+        struct list_utils *p_next = m_head.list.next;
 
         m_head.list.next = &node->list;
         p_next->prev = &node->list;
@@ -219,12 +213,12 @@ bool QCameraQueue::enqueueWithPriority(void *data)
  *
  * RETURN     : data ptr. NULL if not any data in the queue.
  *==========================================================================*/
-void* QCameraQueue::peek()
+void* QueueUtils::peek()
 {
     camera_q_node* node = NULL;
     void* data = NULL;
-    struct cam_list *head = NULL;
-    struct cam_list *pos = NULL;
+    struct list_utils *head = NULL;
+    struct list_utils *pos = NULL;
 
     pthread_mutex_lock(&m_lock);
     if (m_active) {
@@ -254,12 +248,12 @@ void* QCameraQueue::peek()
  *
  * RETURN     : data ptr. NULL if not any data in the queue.
  *==========================================================================*/
-void* QCameraQueue::dequeue(bool bFromHead)
+void* QueueUtils::dequeue(bool bFromHead)
 {
     camera_q_node* node = NULL;
     void* data = NULL;
-    struct cam_list *head = NULL;
-    struct cam_list *pos = NULL;
+    struct list_utils *head = NULL;
+    struct list_utils *pos = NULL;
 
     pthread_mutex_lock(&m_lock);
     if (m_active) {
@@ -271,7 +265,7 @@ void* QCameraQueue::dequeue(bool bFromHead)
         }
         if (pos != head) {
             node = member_of(pos, camera_q_node, list);
-            cam_list_del_node(&node->list);
+            list_del_node(&node->list);
             m_size--;
         }
     }
@@ -289,6 +283,7 @@ void* QCameraQueue::dequeue(bool bFromHead)
  * FUNCTION   : dequeue
  *
  * DESCRIPTION: dequeue data from the queue
+ * 注意需要自己free！！
  *
  * PARAMETERS :
  *   @match : matching function callback
@@ -296,10 +291,10 @@ void* QCameraQueue::dequeue(bool bFromHead)
  *
  * RETURN     : data ptr. NULL if not any data in the queue.
  *==========================================================================*/
-void* QCameraQueue::dequeue(match_fn_data match, void *match_data){
+void* QueueUtils::dequeue(match_fn_data match, void *match_data){
     camera_q_node* node = NULL;
-    struct cam_list *head = NULL;
-    struct cam_list *pos = NULL;
+    struct list_utils *head = NULL;
+    struct list_utils *pos = NULL;
     void* data = NULL;
 
     if ( NULL == match || NULL == match_data ) {
@@ -316,7 +311,7 @@ void* QCameraQueue::dequeue(match_fn_data match, void *match_data){
             pos = pos->next;
             if (NULL != node) {
                 if ( match(node->data, m_userData, match_data) ) {
-                    cam_list_del_node(&node->list);
+                    list_del_node(&node->list);
                     m_size--;
                     data = node->data;
                     free(node);
@@ -340,10 +335,10 @@ void* QCameraQueue::dequeue(match_fn_data match, void *match_data){
  *
  * RETURN     : None
  *==========================================================================*/
-void QCameraQueue::flush(){
+void QueueUtils::flush(){
     camera_q_node* node = NULL;
-    struct cam_list *head = NULL;
-    struct cam_list *pos = NULL;
+    struct list_utils *head = NULL;
+    struct list_utils *pos = NULL;
 
     pthread_mutex_lock(&m_lock);
     if (m_active) {
@@ -353,7 +348,7 @@ void QCameraQueue::flush(){
         while(pos != head) {
             node = member_of(pos, camera_q_node, list);
             pos = pos->next;
-            cam_list_del_node(&node->list);
+            list_del_node(&node->list);
             m_size--;
 
             if (NULL != node->data) {
@@ -382,10 +377,10 @@ void QCameraQueue::flush(){
  *
  * RETURN     : None
  *==========================================================================*/
-void QCameraQueue::flushNodes(match_fn match){
+void QueueUtils::flushNodes(match_fn match){
     camera_q_node* node = NULL;
-    struct cam_list *head = NULL;
-    struct cam_list *pos = NULL;
+    struct list_utils *head = NULL;
+    struct list_utils *pos = NULL;
 
     if ( NULL == match ) {
         return;
@@ -400,7 +395,7 @@ void QCameraQueue::flushNodes(match_fn match){
             node = member_of(pos, camera_q_node, list);
             pos = pos->next;
             if ( match(node->data, m_userData) ) {
-                cam_list_del_node(&node->list);
+                list_del_node(&node->list);
                 m_size--;
 
                 if (NULL != node->data) {
@@ -427,10 +422,10 @@ void QCameraQueue::flushNodes(match_fn match){
  *
  * RETURN     : None
  *==========================================================================*/
-void QCameraQueue::flushNodes(match_fn_data match, void *match_data){
+void QueueUtils::flushNodes(match_fn_data match, void *match_data){
     camera_q_node* node = NULL;
-    struct cam_list *head = NULL;
-    struct cam_list *pos = NULL;
+    struct list_utils *head = NULL;
+    struct list_utils *pos = NULL;
 
     if ( NULL == match ) {
         return;
@@ -445,7 +440,7 @@ void QCameraQueue::flushNodes(match_fn_data match, void *match_data){
             node = member_of(pos, camera_q_node, list);
             pos = pos->next;
             if ( match(node->data, m_userData, match_data) ) {
-                cam_list_del_node(&node->list);
+                list_del_node(&node->list);
                 m_size--;
 
                 if (NULL != node->data) {
@@ -460,5 +455,3 @@ void QCameraQueue::flushNodes(match_fn_data match, void *match_data){
     }
     pthread_mutex_unlock(&m_lock);
 }
-
-}; // namespace qcamera

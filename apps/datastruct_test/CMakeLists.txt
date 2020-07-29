@@ -6,8 +6,8 @@ message(STATUS "build app: " ${PROJECT_NAME})
 
 # TODO: set source file (c/cpp)
 set(SOURCES 
-    ${PROJECT_SOURCE_DIR}/src/myrepo_c.c
-    ${PROJECT_SOURCE_DIR}/src/app.c
+    ${PROJECT_SOURCE_DIR}/src/datastruct_test.c
+    ${PROJECT_SOURCE_DIR}/src/app.cpp
     ${PROJECT_SOURCE_DIR}/src/invrecord.c
 )
 message(STATUS "SRC FILES: " ${SOURCES})

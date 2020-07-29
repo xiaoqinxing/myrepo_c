@@ -66,7 +66,7 @@ public:
     int32_t sendCmd(camera_cmd_type_t cmd, uint8_t sync_cmd, uint8_t priority);
     camera_cmd_type_t getCmd();
 
-    QCameraQueue cmd_queue;      /* cmd queue */
+    QueueUtils cmd_queue;      /* cmd queue */
     pthread_t cmd_pid;           /* cmd thread ID */
     cam_semaphore_t cmd_sem;               /* semaphore for cmd thread */
     cam_semaphore_t sync_sem;              /* semaphore for synchronized call signal */

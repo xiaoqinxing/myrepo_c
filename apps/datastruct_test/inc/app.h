@@ -24,7 +24,7 @@ void test4_size_read_func();
 void test5_stack_func();
 
 void test6_queue_func();
-
+void test_queue_utils_func();
 #ifdef __cplusplus
 }
 #endif

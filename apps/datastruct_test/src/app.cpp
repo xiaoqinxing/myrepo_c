@@ -7,6 +7,8 @@
 #include "pthread.h"
 #include "logprint.h"
 #include "alloc.h"
+#include "queue_utils.h"
+#include "string.h"
 
 void test1_mem_alloc() {
     ALOGE("测试程序");
@@ -68,7 +70,7 @@ typedef struct {
 }IntBufferContext;
 
 //注意这里形参传入的是BufferContext,因为这里只是指向的地址
-static int MyDoubleTest(BufferContext *pBuf) {
+void MyDoubleTest(BufferContext *pBuf) {
     IntBufferContext *p = (IntBufferContext *)pBuf;
     int a = 10;
     pBuf->pBuf = &a;
@@ -81,7 +83,7 @@ void test3_mem_templet_func() {
     int p;
     IntBufferContext membuffer = {{ NULL,sizeof(int),MyDoubleTest }, 0};
     //注意这里传入的是IntBufferContext
-    MemBuffer(&membuffer);
+    MemBuffer((BufferContext*)&membuffer);
     ALOGE("%d", membuffer.rc);
 }
 
@@ -99,7 +101,7 @@ typedef struct {
     long size;
 }SizeGetContext;
 
-static long file_size(FileAccessorContext *p, FILE *fp) {
+void file_size(FileAccessorContext *p, FILE *fp) {
     SizeGetContext *pThis = (SizeGetContext *)p;
     pThis->size = -1;
     if (fseek(fp, 0, SEEK_END) == 0)
@@ -110,9 +112,9 @@ void test4_size_read_func() {
     char filename[50];
     ALOGE("测试程序");
     ALOGE("请输入文件名：");
-    scanf_s("%s", filename, 50);
+    scanf("%s", filename);
     SizeGetContext ctx = { {filename,"rb",file_size},0 };
-    if (!FileAccess(&ctx)) {
+    if (!FileAccess((FileAccessorContext*)&ctx)) {
         ALOGE("文件长度为%d个字节", ctx.size);
     }
     else
@@ -175,3 +177,55 @@ void test6_queue_func() {
            读取，需要打开文件两次，可以将大小存在SizeGetContext中，
            又叫上下文。将打开文件的操作分离，放在process之中
 ******************************************************************/
+
+/******************************************************************
+@brief   : 消息队列实例
+@author  : xiaoqinxing
+@input   ：none
+@output  ：none
+@detail  : 1. enqueue和dequeue存储的都是数据指针，而不是真实的数据
+              因此每次取出数据，注意释放！
+           2. flush会把剩下的没有释放的数据都释放掉，因此必须定义释放回调函数
+           3. 每次flush之后如果还要使用，需要加上init
+******************************************************************/
+void release_data(void* data, void *user_data){
+    FREE(data);
+}
+
+void test_queue_utils_func(){
+    QueueUtils *tmp = new QueueUtils(release_data,nullptr);
+    int *input,*output;
+    ALOGE("创建一个队列，并判断是否为空-%d", tmp->isEmpty());
+    for (int j = 0; j < 2; j++) {
+        for (int i = 0; i < 100; i++) {
+            ALOGE("enqueue:%d", i);
+            input = MALLOC(1,int);
+            *input = i;
+            tmp->enqueue(input);
+        }
+        for (int i = 0; i < 80; i++) {
+            output = (int*)(tmp->dequeue(false));
+            ALOGE("dequeue time:%d value = %d", i + 1, *output);
+            FREE(output);
+        }
+    }
+    ALOGE("dequeue len = %d", tmp->getCurrentSize());
+    tmp->flush();
+    ALOGE("dequeue len = %d", tmp->getCurrentSize());
+    tmp->init();
+    for (int j = 0; j < 2; j++) {
+        for (int i = 0; i < 100; i++) {
+            ALOGE("enqueue:%d", i);
+            input = MALLOC(1,int);
+            *input = i;
+            tmp->enqueue(input);
+        }
+        for (int i = 0; i < 80; i++) {
+            output = (int*)(tmp->dequeue(false));
+            ALOGE("dequeue time:%d value = %d", i + 1, *output);
+            FREE(output);
+        }
+    }
+    delete tmp;
+    ALOGE("销毁队列后队列指针为%p", tmp);
+}

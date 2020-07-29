@@ -1,95 +1,67 @@
-/* mct_list.h
- *
- * Copyright (c) 2012-2016 Qualcomm Technologies, Inc. All Rights Reserved.
- * Qualcomm Technologies Proprietary and Confidential.
- */
+#ifndef __CAMLIST_H
+#define __CAMLIST_H
 
-#ifndef __MCT_LIST_H__
-#define __MCT_LIST_H__
+#include <stddef.h>
+// System dependency
+#include <stdlib.h>
 
-#include "mtype.h"
-typedef struct _mct_list mct_list_t;
+#define member_of(ptr, type, member) ({ \
+  const typeof(((type *)0)->member) *__mptr = (ptr); \
+  (type *)((char *)__mptr - offsetof(type,member));})
 
-typedef boolean (* mct_list_traverse_func)(void *data, void *user_data);
-
-typedef boolean (* mct_list_find_func)(void *data1, void *data2);
-
-typedef void (* mct_list_operate_func)
-  (void *data1, void *data2, const void *user_data);
-
-typedef void (* mct_list_operate_func_multiple_data)
-  (void *data1, void *data2, const void *user_data1, const void *user_data2);
-/*
- * We define List in this form simply because
- * in certain scenario, the list can work
- * as an unbalanced tree.
- * For example, during dynamic module linking,
- * one Stream could have tree type of linked modues,
- * in which one List Node could have multiple children(next).
- *
- * For most cases, nextNum should be ONLY one.
- *
- * It is a root node when prev == NULL
- */
-struct _mct_list {
-  void         *data;
-  mct_list_t   *prev;
-  mct_list_t   **next;   /* array of next(children) */
-  uint32_t next_num; /* number of next(children) */
+struct list_utils {
+  struct list_utils *next, *prev;
 };
 
-#define MCT_LIST_PREV(mct_list) \
-  ((mct_list) ? (((mct_list_t *)(mct_list))->prev) : NULL)
-#define MCT_LIST_NEXT(mct_list) \
-  ((mct_list) ? (((mct_list_t **)(mct_list))->next) : NULL)
-
-#if defined(__cplusplus)
-extern "C" {
-#endif
-
-mct_list_t *mct_list_append(mct_list_t *mct_list, void *data, void *appendto,
-             mct_list_find_func list_find);
-
-// mct_list_t *mct_list_prepend(mct_list_t *mct_list, void *data);
-
-mct_list_t *mct_list_insert(mct_list_t *mct_list, void *data, uint32_t pos);
-
-mct_list_t *mct_list_insert_before(mct_list_t *mct_list, mct_list_t *inserted,
-             const void *data);
-
-mct_list_t *mct_list_remove(mct_list_t *mct_list, const void *data);
-
-mct_list_t *mct_list_find_custom (mct_list_t *mct_list, void *data,
-             mct_list_find_func list_find);
-
-mct_list_t *mct_list_find_and_add_custom (mct_list_t *parent_list,
-  mct_list_t *child_list, void *data, mct_list_find_func list_find);
-
-boolean     mct_list_traverse(mct_list_t *mct_list,
-              mct_list_traverse_func traverse, void *user_data);
-
-void        mct_list_free_list(mct_list_t *mct_list);
-
-void        mct_list_free_all(mct_list_t *mct_list,
-              mct_list_traverse_func traverse);
-
-void        mct_list_free_all_on_data(mct_list_t *mct_list,
-              mct_list_traverse_func traverse, void *user_data);
-
-void        mct_list_operate_nodes (mct_list_t *mct_list,
-              mct_list_operate_func list_operate, void *user_data);
-
-void *mct_list_return_node_by_idx(mct_list_t *mct_list,
-                  uint32_t node_idx);
-
-void mct_list_operate_nodes_multiple_data(mct_list_t *mct_list,
-  mct_list_operate_func_multiple_data list_operate,
-  void *user_data1, void *user_data2);
-
-
-#if defined(__cplusplus)
+/**
+ * 这是一个环形list，list_init指定了队列开始的地方
+ */
+static inline void list_init(struct list_utils *ptr)
+{
+  ptr->next = ptr;
+  ptr->prev = ptr;
 }
-#endif
 
+/**
+ * 在list的末尾增加一个新的节点item
+ * head是原来list的尾部，一般为空
+ */
+static inline void list_add_tail_node(struct list_utils *item,
+  struct list_utils *head)
+{
+  struct list_utils *prev = head->prev;
 
-#endif /* __MCT_LIST_H__ */
+  head->prev = item;
+  item->next = head;
+  item->prev = prev;
+  prev->next = item;
+}
+
+/**
+ * 在一个节点之前增加一个新的节点item
+ * node是任意一个节点
+ */
+static inline void list_insert_before_node(struct list_utils *item,
+  struct list_utils *node)
+{
+  item->next = node;
+  item->prev = node->prev;
+  item->prev->next = item;
+  node->prev = item;
+}
+
+/**
+ * 删除一个节点，由于这是一个环形链表，不需要对链表的前后是否为空进行判断
+ */
+static inline void list_del_node(struct list_utils *ptr)
+{
+  struct list_utils *prev = ptr->prev;
+  struct list_utils *next = ptr->next;
+
+  next->prev = ptr->prev;
+  prev->next = ptr->next;
+  ptr->next = ptr;
+  ptr->prev = ptr;
+}
+
+#endif /* __CAMLIST_H */

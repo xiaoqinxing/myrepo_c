@@ -6,7 +6,7 @@ int main()
     while (1) {
         int test_state = 0;
         ALOGE("\r\n«Î ‰»Î≤‚ ‘≥Ã–Ú–Ú∫≈£∫");
-        scanf_s("%d", &test_state, 2);
+        scanf("%d", &test_state);
         if (test_state == 0)
             exit(0);
         switch (test_state) {
@@ -27,6 +27,9 @@ int main()
                 break;
             case 6:
                 test6_queue_func();
+                break;
+            case 7:
+                test_queue_utils_func();
                 break;
             default:
                 ALOGE("≥¨≥ˆ∑∂Œß");

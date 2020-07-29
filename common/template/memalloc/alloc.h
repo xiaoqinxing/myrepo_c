@@ -32,7 +32,7 @@ extern "C" {
 #define free
 
 #define MALLOC(num, type) (type *)alloc((num) * sizeof(type))
-#define FREE(pointer) free_c(&(pointer))
+#define FREE(pointer) free_c((void**)&(pointer))
 extern void *alloc(size_t size);
 extern void free_c(void **pointer);
 
@@ -55,8 +55,8 @@ typedef struct BufferContext {
 
 char MemBuffer(BufferContext *pThis);
 
-#endif // !__ALLOC_H__
-
 #ifdef __cplusplus
 }
 #endif
+
+#endif // !__ALLOC_H__
