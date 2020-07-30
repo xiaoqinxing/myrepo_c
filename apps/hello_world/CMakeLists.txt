@@ -9,6 +9,7 @@ message(STATUS "build app: " ${PROJECT_NAME})
 set(SOURCES 
     ${PROJECT_SOURCE_DIR}/src/hello_world.c
 )
+aux_source_directory(${PROJECT_SOURCE_DIR}/src SOURCES)
 message(STATUS "SRC FILES: " ${SOURCES})
 
 # set output file path

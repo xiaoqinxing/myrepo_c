@@ -2,24 +2,17 @@
 project(datastruct_test)
 message("====================================================")
 message(STATUS "build app: " ${PROJECT_NAME})
-# add version
-# configure_file(config.h.in config.h)
 
-# TODO: set source file (c/cpp)
-set(SOURCES 
-    ${PROJECT_SOURCE_DIR}/src/datastruct_test.c
-    ${PROJECT_SOURCE_DIR}/src/app.cpp
-    ${PROJECT_SOURCE_DIR}/src/invrecord.c
-)
+# find all source file in src
+aux_source_directory(${PROJECT_SOURCE_DIR}/src SOURCES)
 message(STATUS "SRC FILES: " ${SOURCES})
-set(HEADER
-    ${PROJECT_SOURCE_DIR}/inc
-)
 
-include_directories(${PROJECT_NAME} ${HEADER})
+include_directories(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/inc)
+message(STATUS "INC FILES: " ${PROJECT_SOURCE_DIR}/inc)
+
 # set output file path
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
-message(STATUS "BUILD EXE: " ${EXECUTABLE_OUTPUT_PATH} "/" ${PROJECT_NAME})
+message(STATUS "BUILD EXE: " ${EXECUTABLE_OUTPUT_PATH} "/" ${PROJECT_NAME} ".exe")
 
 # Add an executable
 add_executable(${PROJECT_NAME} ${SOURCES})
