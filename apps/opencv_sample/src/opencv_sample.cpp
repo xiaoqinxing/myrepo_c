@@ -19,8 +19,8 @@ int main(int argc, char** argv )
         printf("No image data \n");
         return -1;
     }
-    // namedWindow("Display Image", WINDOW_AUTOSIZE );
-    // imshow("Display Image", image);
+    namedWindow("Display Image", WINDOW_AUTOSIZE );
+    imshow("Display Image", image);
     imwrite("1.jpg",image);
 
     waitKey(0);

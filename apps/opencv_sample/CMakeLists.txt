@@ -16,11 +16,9 @@ message(STATUS "BUILD EXE: " ${EXECUTABLE_OUTPUT_PATH} "/" ${PROJECT_NAME})
 # Add an executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-# set(OpenCV_DIR C:\\install_pack\\opencv\\build\\x64\\vc14\\lib) 
-if (CMAKE_SYSTEM_NAME MATCHES "Windows")
-    # set(OpenCV_DIR C:\\opencv\\opencv\\build\\x64\\vc15\\lib)
-    set(OpenCV_DIR C:\\opencv\\opencv\\sources\\build\\install\\x64\\mingw\\lib)
-endif()
+# if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+#     set(OpenCV_DIR C:\\opencv\\opencv\\sources\\build\\install\\x64\\mingw\\lib)
+# endif()
 
 find_package( OpenCV REQUIRED )
 if(OpenCV_FOUND)
