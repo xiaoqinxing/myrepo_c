@@ -122,7 +122,7 @@ bool Socket::accept(Socket &new_socket) const
 
 bool Socket::send(const string &s, size_t size) const
 {
-    MMCAM_ASSERT_PRE(s.capacity() >= size, "Buffer size(%zu) less than Msg size(%zu)",
+    ASSERT_PRE(s.capacity() >= size, "Buffer size(%zu) less than Msg size(%zu)",
                      s.capacity(), size);
     int status = 0;
     size_t sent_size = 0;
@@ -259,7 +259,7 @@ void ServerSocket::SetupEpoll(int pipefd)
 ServerSocket::ServerSocket(unsigned short port, int pipefd)
 {
     bool rc = Socket::create();
-    MMCAM_ASSERT(rc == true, "Could not create server socket: %s", strerror(errno));
+    COMMON_ASSERT(rc == true, "Could not create server socket: %s", strerror(errno));
 
     if (port) {
         rc = Socket::bind(port);
@@ -388,10 +388,10 @@ end:
 ClientSocket::ClientSocket (string &host, int port)
 {
     bool rc = Socket::create();
-    MMCAM_ASSERT(rc == true, "Could not create server socket");
+    COMMON_ASSERT(rc == true, "Could not create server socket");
 
     rc = Socket::connect (host, port);
-    MMCAM_ASSERT(rc == true, "Could not connect to host");
+    COMMON_ASSERT(rc == true, "Could not connect to host");
 }
 
 }; //namespace mmcam_utils

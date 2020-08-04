@@ -27,7 +27,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#include "mmcam_log_utils.h"
+#include "logprint.h"
 
 using mmcam_utils::string;
 

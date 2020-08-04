@@ -78,6 +78,52 @@ extern module_debug_t debug_level[MAX_MODULE];
 #define ALOGL(fmt, args...) LOG(MAIN_MODULE, DBG_LOW,  fmt, ##args)
 #define ALOGI(fmt, args...) LOG(MAIN_MODULE, DBG_INFO, fmt, ##args)
 
+#define CLOGE(fmt, args...) LOG(COMMON_MODULE, DBG_ERR,  fmt, ##args)
+#define CLOGW(fmt, args...) LOG(COMMON_MODULE, DBG_WARN, fmt, ##args)
+#define CLOGH(fmt, args...) LOG(COMMON_MODULE, DBG_HIGH, fmt, ##args)
+#define CLOGD(fmt, args...) LOG(COMMON_MODULE, DBG_DEBUG,fmt, ##args)
+#define CLOGL(fmt, args...) LOG(COMMON_MODULE, DBG_LOW,  fmt, ##args)
+#define CLOGI(fmt, args...) LOG(COMMON_MODULE, DBG_INFO, fmt, ##args)
+
+#define DLOGE(fmt, args...) LOG(LEAK_DEBUG_MODULE, DBG_ERR,  fmt, ##args)
+#define DLOGE(fmt, args...) LOG(LEAK_DEBUG_MODULE, DBG_WARN, fmt, ##args)
+#define DLOGE(fmt, args...) LOG(LEAK_DEBUG_MODULE, DBG_HIGH, fmt, ##args)
+#define DLOGE(fmt, args...) LOG(LEAK_DEBUG_MODULE, DBG_DEBUG,fmt, ##args)
+#define DLOGE(fmt, args...) LOG(LEAK_DEBUG_MODULE, DBG_LOW,  fmt, ##args)
+#define DLOGE(fmt, args...) LOG(LEAK_DEBUG_MODULE, DBG_INFO, fmt, ##args)
+
+#ifdef COLOR_DEBUG
+#define KMAG  "\x1B[35m"
+#define KRED  "\x1B[31m"
+#define KYEL  "\x1B[33m"
+#define KBLU  "\x1B[34m"
+#define KWHT  "\x1B[37m"
+
+#define ALOGE(fmt, ...) printf("%s%s(%d): " #fmt "\n", KRED, __FILE__, __LINE__, ##__VA_ARGS__)
+#define ALOGW(fmt, ...) printf("%s%s(%d): " #fmt "\n", KMAG, __FILE__, __LINE__, ##__VA_ARGS__)
+#define ALOGI(fmt, ...) printf("%s%s(%d): " #fmt "\n", KYEL, __FILE__, __LINE__, ##__VA_ARGS__)
+#define ALOGV(fmt, ...) printf("%s%s(%d): " #fmt "\n", KBLU, __FILE__, __LINE__, ##__VA_ARGS__)
+#define ALOGB(fmt, ...) printf("%s" fmt, KWHT, ##__VA_ARGS__)
+#endif
+
+#define ASSERT(TST, fmt, ...) do { \
+        if(!(TST)) { \
+          DLOGE(Assert Failed: #fmt, ##__VA_ARGS__); \
+          abort(); \
+        } \
+    } while(0)
+
+#define ASSERT_PRE(TST, fmt, ...) ASSERT (TST, fmt, ##__VA_ARGS__)
+
+#ifndef NDEBUG
+#define ASSERT_POST(TST, fmt, ...) ASSERT (TST, fmt, ##__VA_ARGS__)
+#define ASSERT_INVARIANT(TST, fmt, ...) ASSERT (TST, fmt, ##__VA_ARGS__)
+#else
+#define ASSERT_POST(TST, ...) ((void)0)
+#define ASSERT_INVARIANT(TST, ...) ((void)0)
+#endif
+
+
 #define SETLOG(module, level) debug_level_set(module, level)
 void debug_print(const debug_module_t module, const debug_level_t level,
                  const char *func, const int line, const char *format, ...);
