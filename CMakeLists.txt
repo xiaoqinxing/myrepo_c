@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 # set compiler path
 set(CMAKE_C_COMPILER gcc)
 set(CMAKE_CXX_COMPILER g++)
@@ -41,8 +41,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb -lpthread")  
 SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall -lpthread")  
 
+IF (CMAKE_BUILD_TYPE STREQUAL Release)
+    ADD_DEFINITIONS(-DNDEBUG)
+ENDIF()
+
 add_subdirectory(debug)
 add_subdirectory(apps/hello_world)
 add_subdirectory(apps/datastruct_test)
 add_subdirectory(apps/opencv_sample)
+add_subdirectory(apps/qt5-project)
+add_subdirectory(apps/opencv_qt_test)
 add_subdirectory(common)
