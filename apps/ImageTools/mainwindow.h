@@ -22,12 +22,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene scene;
-    QPixmap pixmap;
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
-    void resizeEvent(QResizeEvent *event);
 };
 #endif // MAINWINDOW_H

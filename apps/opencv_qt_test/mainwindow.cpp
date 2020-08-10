@@ -8,7 +8,7 @@
 #include "qfiledialog.h"
 #include "qmessagebox.h"
 
-MainWindow::MainWindow(QWidget* parent)
+Images::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
