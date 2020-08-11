@@ -2,12 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QGraphicsScene>
-#include "QFileInfo"
-#include "QDragEnterEvent"
-#include "QMessageBox"
-#include "QDrag"
-#include "QFile"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE

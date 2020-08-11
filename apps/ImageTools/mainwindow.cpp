@@ -1,13 +1,10 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "images.h"
-#include "QGraphicsRectItem"
-#include "QDragEnterEvent"
-#include "QDropEvent"
+#include "imageeditor.h"
 #include "QMimeData"
+#include "QDragEnterEvent"
 #include "QDebug"
-#include "QWheelEvent"
-#include "QtMath"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -39,7 +36,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event){
 void MainWindow::dropEvent(QDropEvent *event)
 {
     QFileInfo file(event->mimeData()->urls().at(0).toLocalFile());
-    Images *a = new Images(file);
+    ImageEditor *a = new ImageEditor(file);
 //    ui->gridLayout->addWidget(a);
     ui->mdiArea->addSubWindow(a);
     a->show();

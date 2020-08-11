@@ -1,20 +1,12 @@
-#include "images.h"
-#include "./ui_images.h"
-#include "QGraphicsView"
-#include "QDragEnterEvent"
-#include "QScrollBar"
-#include "QDropEvent"
-#include "QMimeData"
+#include "imageeditor.h"
+#include "./ui_imageeditor.h"
 #include "QDebug"
-#include "QWheelEvent"
-#include "QtMath"
-#include "QMainWindow"
-#include "string"
 #include "imageview.h"
+#include "QMessageBox"
 
-Images::Images(QFileInfo file)
+ImageEditor::ImageEditor(QFileInfo file)
     : QMainWindow()
-    , ui(new Ui::Images)
+    , ui(new Ui::ImageEditor)
 {
     ui->setupUi(this);
     this->setAcceptDrops(false);
@@ -27,7 +19,8 @@ Images::Images(QFileInfo file)
      * 其数据指针传递给了Mat类。这两种方法都是非常有用的（更易于图像处理）同时也
      * 是非常危险的（可能造成应用程序的崩溃）
      */
-    connect(ui->graphicsView, &ImageView::mousemove_signal,this,&Images::deal_mousemove_signal);
+    connect(ui->graphicsView, &ImageView::mousemove_signal,
+            this,&ImageEditor::deal_mousemove_signal);
     image = cv::imread(file.absoluteFilePath().toStdString());
     if(image.data != NULL)
         showimage(image);
@@ -37,13 +30,13 @@ Images::Images(QFileInfo file)
                            tr("图像打不开"));
 }
 
-Images::~Images()
+ImageEditor::~ImageEditor()
 {
     qDebug() << "delete images";
     delete ui;
 }
 
-void Images::showimage(cv::Mat &mat)
+void ImageEditor::showimage(cv::Mat &mat)
 {
     QImage qimage(mat.data,
                  mat.cols,
@@ -57,7 +50,7 @@ void Images::showimage(cv::Mat &mat)
 
 
 
-void Images::deal_mousemove_signal(QPointF point)
+void ImageEditor::deal_mousemove_signal(QPointF point)
 {
     ui->statusBar->showMessage(QString::asprintf("x:%.0f y:%.0f",point.x(),point.y()));
 }

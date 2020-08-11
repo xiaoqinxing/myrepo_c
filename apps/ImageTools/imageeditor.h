@@ -3,27 +3,23 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
-#include "QFileInfo"
-#include "QDragEnterEvent"
-#include "QMessageBox"
-#include "QDrag"
-#include "QFile"
 #include "opencv2/opencv.hpp"
+#include "QFileInfo"
 QT_BEGIN_NAMESPACE
-namespace Ui { class Images; }
+namespace Ui { class ImageEditor; }
 QT_END_NAMESPACE
 
-class Images : public QMainWindow
+class ImageEditor : public QMainWindow
 {
     Q_OBJECT
 
 public:
-//    Images(QWidget *parent = nullptr);
-    Images(QFileInfo file);
-    ~Images();
+//    ImageEditor(QWidget *parent = nullptr);
+    ImageEditor(QFileInfo file);
+    ~ImageEditor();
 
 private:
-    Ui::Images *ui;
+    Ui::ImageEditor *ui;
     QGraphicsScene scene;
     QPixmap pixmap;
     QPointF scensMousePos;

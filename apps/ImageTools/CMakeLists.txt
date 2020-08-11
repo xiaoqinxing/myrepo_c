@@ -33,7 +33,7 @@ include_directories(${PROJECT_NAME} ${PROJECT_SOURCE_DIR})
 #查找当前文件夹中所有的ui文件
 set(UI_FILES
     mainwindow.ui
-    images.ui
+    imageeditor.ui
 )
 #FILE(GLOB UI_FILES "*.ui")
 
