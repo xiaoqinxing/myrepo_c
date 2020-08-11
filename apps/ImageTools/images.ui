@@ -13,13 +13,19 @@
   <property name="windowTitle">
    <string>图片</string>
   </property>
-  <property name="dockOptions">
-   <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks</set>
+  <property name="toolTip">
+   <string>原图</string>
+  </property>
+  <property name="toolTipDuration">
+   <number>-1</number>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QGraphicsView" name="graphicsView">
+      <property name="toolTipDuration">
+       <number>-1</number>
+      </property>
       <property name="verticalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>

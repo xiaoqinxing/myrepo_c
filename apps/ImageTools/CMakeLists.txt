@@ -50,3 +50,15 @@ endif()
 
 
 target_link_libraries(ImageTools PRIVATE Qt5::Widgets Qt5::Core Qt5::Gui)
+
+
+find_package( OpenCV REQUIRED )
+if(OpenCV_FOUND)
+    message(STATUS "OpenCV library has found")
+    message(STATUS "OpenCV_INCLUDE_DIR: " ${OpenCV_INCLUDE_DIRS})
+    message(STATUS "OpenCV_LIBRARY: " ${OpenCV_LIBS})
+    target_include_directories(${PROJECT_NAME} PRIVATE ${OpenCV_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS})
+else(OpenCV_FOUND)
+    message(FATAL_ERROR "OpenCV library not found")
+endif(OpenCV_FOUND)

@@ -8,6 +8,7 @@
 #include "QMessageBox"
 #include "QDrag"
 #include "QFile"
+#include "opencv2/opencv.hpp"
 QT_BEGIN_NAMESPACE
 namespace Ui { class Images; }
 QT_END_NAMESPACE
@@ -26,9 +27,11 @@ private:
     QGraphicsScene scene;
     QPixmap pixmap;
     QPointF scensMousePos;
+    cv::Mat image;
+    void showimage(cv::Mat &mat);
 
 protected:
-//    void wheelEvent(QWheelEvent *event);
+    void wheelEvent(QWheelEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 };
 #endif // IMAGES_H
