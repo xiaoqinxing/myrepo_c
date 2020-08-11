@@ -29,9 +29,9 @@ private:
     QPointF scensMousePos;
     cv::Mat image;
     void showimage(cv::Mat &mat);
+    void deal_mousemove_signal(QPointF point);
 
 protected:
-    void wheelEvent(QWheelEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+
 };
 #endif // IMAGES_H

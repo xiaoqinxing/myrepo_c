@@ -10,6 +10,7 @@
 #include "QtMath"
 #include "QMainWindow"
 #include "string"
+#include "imageview.h"
 
 Images::Images(QFileInfo file)
     : QMainWindow()
@@ -26,6 +27,7 @@ Images::Images(QFileInfo file)
      * 其数据指针传递给了Mat类。这两种方法都是非常有用的（更易于图像处理）同时也
      * 是非常危险的（可能造成应用程序的崩溃）
      */
+    connect(ui->graphicsView, &ImageView::mousemove_signal,this,&Images::deal_mousemove_signal);
     image = cv::imread(file.absoluteFilePath().toStdString());
     if(image.data != NULL)
         showimage(image);
@@ -52,33 +54,10 @@ void Images::showimage(cv::Mat &mat)
     scene.clear();
     scene.addPixmap(QPixmap::fromImage(qimage.rgbSwapped()));
 }
-void Images::wheelEvent(QWheelEvent *event)
-{
-    qDebug()<< event->orientation();
-    if(event->orientation()== Qt::Vertical)
-    {
-        double angleDeltaY =event->angleDelta().y();
-        double zoomFactor = qPow(1.0015,angleDeltaY);
-        ui->graphicsView->scale(zoomFactor,zoomFactor);
-        if(angleDeltaY>0)
-        {
 
-            scensMousePos = ui->graphicsView->mapToScene(event->pos());
-            ui->graphicsView->centerOn(scensMousePos);
-        }
-        qDebug()<< scensMousePos;
-        ui->graphicsView->viewport()->update();
-        event->ignore();
-    }
-    else{
-        event->ignore();
-    }
-}
-void Images::mouseMoveEvent(QMouseEvent *event)
+
+
+void Images::deal_mousemove_signal(QPointF point)
 {
-    scensMousePos = ui->graphicsView->mapToScene(event->pos());
-    qDebug()<< scensMousePos;
-    QString pos_status;
-    pos_status = "x: "+ QString::number(scensMousePos.x()) +" y: "+ QString::number(scensMousePos.y());
-    ui->statusBar->showMessage(pos_status);
+    ui->statusBar->showMessage(QString::asprintf("x:%.0f y:%.0f",point.x(),point.y()));
 }
