@@ -42,9 +42,23 @@ void ImageEditor::showimage(QImage *image)
 
 void ImageEditor::deal_mousemove_signal(QPointF point)
 {
-    tPointColor point_rgb = img.getImagePoint(nowImage,point);
-    ui->statusBar->showMessage(QString::asprintf("x:%.0f y:%.0f | R:%d G:%d B:%d",
-                                                 point.x(),point.y(),point_rgb.R,
+    //边界检查
+    int x,y;
+    if(point.x()>scene.width())
+        x = scene.width()-1;
+    else if(point.x()<0)
+        x = 0;
+    else
+        x = (int)point.x();
+    if(point.y()>scene.height())
+        y = scene.height()-1;
+    else if(point.y()<0)
+        y = 0;
+    else
+        y = (int)point.y();
+    tPointColor point_rgb = img.getImagePoint(nowImage,x,y);
+    ui->statusBar->showMessage(QString::asprintf("x:%d y:%d | R:%d G:%d B:%d",
+                                                 x,y,point_rgb.R,
                                                  point_rgb.G,point_rgb.B));
 }
 

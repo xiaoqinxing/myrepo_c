@@ -56,12 +56,13 @@ void ImageEffect::imageconvert(QImage* image)
     }
 }
 
-tPointColor ImageEffect::getImagePoint(QImage* image, QPointF point)
+tPointColor ImageEffect::getImagePoint(QImage* image, int x, int y)
 {
     Vec3b point_rgb;
     tPointColor ret;
     imageconvert(image);
-    point_rgb = srcimage.at<Vec3b>(point.x(),point.y());
+    //at函数中i对应的是点的y坐标，j对应的是点的x坐标，而不是我们习惯的（x,y）
+    point_rgb = srcimage.at<Vec3b>(y,x);
     ret.R = point_rgb[0];
     ret.G = point_rgb[1];
     ret.B = point_rgb[2];

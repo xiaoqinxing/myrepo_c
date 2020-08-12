@@ -25,7 +25,7 @@ public:
     void saveimage(QImage* image,QString filename);
     QImage* getSrcImage();
     QImage* getDstImage();
-    tPointColor getImagePoint(QImage* image, QPointF point);
+    tPointColor getImagePoint(QImage* image, int x, int y);
 private:
     Mat srcimage;
     Mat dstimage;
