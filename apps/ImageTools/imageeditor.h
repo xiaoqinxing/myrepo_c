@@ -3,12 +3,11 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
-#include "opencv2/opencv.hpp"
 #include "QFileInfo"
+#include "imageeffect.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class ImageEditor; }
 QT_END_NAMESPACE
-
 class ImageEditor : public QMainWindow
 {
     Q_OBJECT
@@ -20,16 +19,19 @@ public:
 
 private:
     Ui::ImageEditor *ui;
+    ImageEffect img;
     QGraphicsScene scene;
     QPixmap pixmap;
     QPointF scensMousePos;
-    cv::Mat image;
-    cv::Mat outimage;
-    void showimage(cv::Mat &mat);
+    QImage *nowImage;
+    void showimage(QImage *img);
     void deal_mousemove_signal(QPointF point);
-    void box_blur();
 
 protected:
 
+private slots:
+    void on_saveimage_triggered();
+    void on_guassian_triggered();
+    void on_boxblur_triggered();
 };
 #endif // IMAGES_H

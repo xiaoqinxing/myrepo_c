@@ -40,12 +40,15 @@ set(UI_FILES
 #通过Ui文件生成对应的头文件，一定要添加
 #qt5_wrap_ui(UI_HEADERS ${UI_FILES})
 
+#添加资源文件
+set( QRCS resource.qrc )
+
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
 
 if(ANDROID)
-  add_library( ${PROJECT_NAME} ${SOURCES} ${UI_FILES})
+  add_library( ${PROJECT_NAME} ${SOURCES} ${UI_FILES} ${QRCS})
 else()
-  add_executable( ${PROJECT_NAME} ${SOURCES} ${UI_FILES})
+  add_executable( ${PROJECT_NAME} ${SOURCES} ${UI_FILES} ${QRCS})
 endif()
 
 

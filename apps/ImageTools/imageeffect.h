@@ -2,18 +2,27 @@
 #define IMAGEEFFECT_H
 
 #include "opencv2/opencv.hpp"
+#include "QFileInfo"
+#include "QImage"
 using cv::Mat;
 typedef enum{
     BoxBlur,
-    Guassian
+    Gaussian
 }typeBlur;
 class ImageEffect
 {
 public:
-    ImageEffect(Mat &inputImage, Mat &outputImage);
+    ImageEffect(QFileInfo file);
+    ~ImageEffect();
     void Blur(typeBlur type);
+    void saveimage(QImage* image,QString filename);
+    QImage* getSrcImage();
+    QImage* getDstImage();
 private:
-    Mat image;
+    Mat srcimage;
+    Mat dstimage;
+    QImage *srcqimage;
+    QImage *dstqimage;
 };
 
 #endif // IMAGEEFFECT_H
