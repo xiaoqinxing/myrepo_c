@@ -13,8 +13,13 @@ public:
 protected:
     void mouseMoveEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
+//    void keyPressEvent(QKeyEvent *event);
+//    void keyReleaseEvent(QKeyEvent *event);
+
 private:
     QPointF sceneMousePos;
+    // bool isCtrlKeyPressed;
+    // QPoint pointPressed;
 
 signals:
     void mousemove_signal(QPointF point);
