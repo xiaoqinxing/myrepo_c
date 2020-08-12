@@ -3,6 +3,7 @@
 #include "QDebug"
 #include "imageview.h"
 #include "QMessageBox"
+#include "imageeffect.h"
 
 ImageEditor::ImageEditor(QFileInfo file)
     : QMainWindow()
@@ -28,6 +29,7 @@ ImageEditor::ImageEditor(QFileInfo file)
         QMessageBox::critical(this,
                            tr("错误"),
                            tr("图像打不开"));
+    connect(ui->boxblur, &QAction::triggered,this,&ImageEditor::box_blur);
 }
 
 ImageEditor::~ImageEditor()
@@ -48,9 +50,14 @@ void ImageEditor::showimage(cv::Mat &mat)
     scene.addPixmap(QPixmap::fromImage(qimage.rgbSwapped()));
 }
 
-
-
 void ImageEditor::deal_mousemove_signal(QPointF point)
 {
     ui->statusBar->showMessage(QString::asprintf("x:%.0f y:%.0f",point.x(),point.y()));
+}
+
+void ImageEditor::box_blur()
+{
+    ImageEffect imgeffect(image,outimage);
+    imgeffect.Blur(BoxBlur);
+    showimage(outimage);
 }

@@ -24,8 +24,10 @@ private:
     QPixmap pixmap;
     QPointF scensMousePos;
     cv::Mat image;
+    cv::Mat outimage;
     void showimage(cv::Mat &mat);
     void deal_mousemove_signal(QPointF point);
+    void box_blur();
 
 protected:
 
