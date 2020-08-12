@@ -18,13 +18,13 @@ ImageEffect::ImageEffect(QFileInfo file)
                                srcimage.cols,
                                srcimage.rows,
                                srcimage.step,
-                               QImage::Format_BGR888);
+                               QImage::Format_RGB888);
         dstimage = srcimage.clone();
         dstqimage = new QImage(dstimage.data,
                                dstimage.cols,
                                dstimage.rows,
                                dstimage.step,
-                               QImage::Format_BGR888);
+                               QImage::Format_RGB888);
     }
     else
     {
@@ -41,16 +41,38 @@ ImageEffect::~ImageEffect()
 
 void ImageEffect::saveimage(QImage* image, QString filename)
 {
-    if(image == srcqimage)
-        imwrite(filename.toStdString(), srcimage);
-    else if(image == dstqimage)
-        imwrite(filename.toStdString(), dstimage);
+    imageconvert(image);
+    imwrite(filename.toStdString(), nowimage);
+}
+
+//convert from QImage to Mat
+void ImageEffect::imageconvert(QImage* image)
+{
+    if(image == srcqimage){
+        nowimage = srcimage;
+    }
+    else if(image == dstqimage){
+        nowimage = dstimage;
+    }
+}
+
+tPointColor ImageEffect::getImagePoint(QImage* image, QPointF point)
+{
+    Vec3b point_rgb;
+    tPointColor ret;
+    imageconvert(image);
+    point_rgb = srcimage.at<Vec3b>(point.x(),point.y());
+    ret.R = point_rgb[0];
+    ret.G = point_rgb[1];
+    ret.B = point_rgb[2];
+    return ret;
 }
 
 QImage* ImageEffect::getSrcImage()
 {
     return srcqimage;
 }
+
 QImage* ImageEffect::getDstImage()
 {
     return dstqimage;

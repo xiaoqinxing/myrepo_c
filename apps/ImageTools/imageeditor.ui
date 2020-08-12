@@ -11,10 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>图片</string>
+   <string/>
   </property>
   <property name="toolTip">
-   <string>原图</string>
+   <string/>
   </property>
   <property name="toolTipDuration">
    <number>-1</number>

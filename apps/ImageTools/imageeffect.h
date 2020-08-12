@@ -11,6 +11,11 @@ typedef enum{
     MediaBlur,
     BilateralBlur
 }typeBlur;
+typedef struct{
+    unsigned char R;
+    unsigned char G;
+    unsigned char B;
+}tPointColor;
 class ImageEffect
 {
 public:
@@ -20,11 +25,14 @@ public:
     void saveimage(QImage* image,QString filename);
     QImage* getSrcImage();
     QImage* getDstImage();
+    tPointColor getImagePoint(QImage* image, QPointF point);
 private:
     Mat srcimage;
     Mat dstimage;
+    Mat nowimage;
     QImage *srcqimage;
     QImage *dstqimage;
+    void imageconvert(QImage* image);
 };
 
 #endif // IMAGEEFFECT_H
