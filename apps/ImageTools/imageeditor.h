@@ -33,5 +33,7 @@ private slots:
     void on_saveimage_triggered();
     void on_guassian_triggered();
     void on_boxblur_triggered();
+    void on_medianblur_triggered();
+    void on_bilateralblur_triggered();
 };
 #endif // IMAGES_H

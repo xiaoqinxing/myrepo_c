@@ -56,14 +56,25 @@ QImage* ImageEffect::getDstImage()
     return dstqimage;
 }
 
+#define BLUR_LEN 5
+#define BLUR_SIZE Size(BLUR_LEN,BLUR_LEN)
 void ImageEffect::Blur(typeBlur type)
 {
     switch (type) {
         case BoxBlur:
-            boxFilter(srcimage,dstimage,-1,Size(3,3));
+            boxFilter(srcimage,dstimage,-1,BLUR_SIZE);
             break;
         case Gaussian:
-            GaussianBlur(srcimage,dstimage,Size(5,5),0,0);
+            GaussianBlur(srcimage,dstimage,BLUR_SIZE,0,0);
+            break;
+        case MediaBlur:
+            medianBlur(srcimage,dstimage,BLUR_LEN);
+            break;
+        case BilateralBlur:
+            bilateralFilter(srcimage,dstimage,25,25*2,25/2);
+            break;
+        default:
+            break;
     }
 }
 

@@ -45,6 +45,21 @@ void ImageEditor::deal_mousemove_signal(QPointF point)
     ui->statusBar->showMessage(QString::asprintf("x:%.0f y:%.0f",point.x(),point.y()));
 }
 
+/////////////////////////////////////////////////////////////
+/// \brief 工具栏
+/////////////////////////////////////////////////////////////
+void ImageEditor::on_saveimage_triggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this,
+        "打开输入图像",
+        QDir::currentPath(),
+        "*.jpg;;*.png;;*.bmp");
+    img.saveimage(nowImage,filename);
+}
+
+/////////////////////////////////////////////////////////////
+/// \brief 菜单栏
+/////////////////////////////////////////////////////////////
 void ImageEditor::on_boxblur_triggered()
 {
     img.Blur(BoxBlur);
@@ -57,11 +72,14 @@ void ImageEditor::on_guassian_triggered()
     showimage(img.getDstImage());
 }
 
-void ImageEditor::on_saveimage_triggered()
+void ImageEditor::on_medianblur_triggered()
 {
-    QString filename = QFileDialog::getSaveFileName(this,
-        "打开输入图像",
-        QDir::currentPath(),
-        "*.jpg;;*.png;;*.bmp");
-    img.saveimage(nowImage,filename);
+    img.Blur(MediaBlur);
+    showimage(img.getDstImage());
+}
+
+void ImageEditor::on_bilateralblur_triggered()
+{
+    img.Blur(BilateralBlur);
+    showimage(img.getDstImage());
 }

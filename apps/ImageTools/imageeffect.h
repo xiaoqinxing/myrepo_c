@@ -7,7 +7,9 @@
 using cv::Mat;
 typedef enum{
     BoxBlur,
-    Gaussian
+    Gaussian,
+    MediaBlur,
+    BilateralBlur
 }typeBlur;
 class ImageEffect
 {
