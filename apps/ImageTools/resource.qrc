@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/tool_icon">
         <file>resource/save_icon.png</file>
+        <file>resource/compare.png</file>
     </qresource>
 </RCC>

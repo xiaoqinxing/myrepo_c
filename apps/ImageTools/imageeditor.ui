@@ -117,6 +117,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="saveimage"/>
+   <addaction name="actioncompare"/>
   </widget>
   <action name="historgram">
    <property name="text">
@@ -161,6 +162,18 @@
   <action name="bilateralblur">
    <property name="text">
     <string>双边滤波</string>
+   </property>
+  </action>
+  <action name="actioncompare">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/tool_icon/resource/compare.png</normaloff>:/tool_icon/resource/compare.png</iconset>
+   </property>
+   <property name="text">
+    <string>compare</string>
+   </property>
+   <property name="toolTip">
+    <string>compare</string>
    </property>
   </action>
  </widget>

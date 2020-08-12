@@ -83,3 +83,11 @@ void ImageEditor::on_bilateralblur_triggered()
     img.Blur(BilateralBlur);
     showimage(img.getDstImage());
 }
+
+void ImageEditor::on_actioncompare_triggered()
+{
+    if(nowImage == img.getDstImage())
+        showimage(img.getSrcImage());
+    else
+        showimage(img.getDstImage());
+}

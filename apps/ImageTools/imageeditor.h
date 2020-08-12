@@ -35,5 +35,6 @@ private slots:
     void on_boxblur_triggered();
     void on_medianblur_triggered();
     void on_bilateralblur_triggered();
+    void on_actioncompare_triggered();
 };
 #endif // IMAGES_H
