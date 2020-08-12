@@ -4,7 +4,7 @@
 ImageView::ImageView(QWidget *parent) : QGraphicsView(parent)
 {
     scaleSize = 1.0;
-    isCtrlKeyPressed = false;
+//    isCtrlKeyPressed = false;
 }
 
 void ImageView::mouseMoveEvent(QMouseEvent *event)
