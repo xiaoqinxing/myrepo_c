@@ -5,7 +5,7 @@
 #include "QFileInfo"
 #include "QImage"
 #include "QRect"
-#include "staticsview.h"
+#include "imagecommon.h"
 using cv::Mat;
 /*滤波类型*/
 typedef enum{
@@ -25,7 +25,7 @@ public:
     QImage* getSrcImage();
     QImage* getDstImage();
     tRgbColor getImagePoint(QImage* image, int x, int y);
-    tStaticsMsg* calcStatics(int x1, int y1, int x2, int y2);
+    tStaticsMsg* calcStatics(QImage* image,int x1, int y1, int x2, int y2);
 private:
     Mat srcimage;
     Mat dstimage;

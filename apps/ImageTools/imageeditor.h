@@ -5,6 +5,8 @@
 #include <QGraphicsScene>
 #include "QFileInfo"
 #include "imageeffect.h"
+#include "staticsview.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class ImageEditor; }
 QT_END_NAMESPACE
@@ -40,5 +42,6 @@ private slots:
     void on_actioncompare_triggered();
     void on_statics_toggled(bool arg1);
     void on_graphicsView_rubberBandChanged(const QRect &viewportRect, const QPointF &fromScenePoint, const QPointF &toScenePoint);
+    void on_historgram_triggered();
 };
 #endif // IMAGES_H

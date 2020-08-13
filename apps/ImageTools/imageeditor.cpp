@@ -5,7 +5,6 @@
 #include "QMessageBox"
 #include "imageeffect.h"
 #include "QFileDialog"
-#include "staticsview.h"
 
 ImageEditor::ImageEditor(QFileInfo file)
     : QMainWindow()
@@ -125,7 +124,7 @@ void ImageEditor::on_graphicsView_rubberBandChanged(const QRect &viewportRect, c
 {
     qDebug() << viewportRect << fromScenePoint<< toScenePoint;
     if(toScenePoint.x() == 0 && toScenePoint.y() == 0 && rect_x2>rect_x1 && rect_y2>rect_y1){
-        tStaticsMsg *msg = img.calcStatics(rect_x1,rect_y1,rect_x2,rect_y2);
+        tStaticsMsg *msg = img.calcStatics(nowImage, rect_x1,rect_y1,rect_x2,rect_y2);
         if(msg != nullptr){
             staticsview.Update(msg);
             staticsview.show();
@@ -140,4 +139,9 @@ void ImageEditor::on_graphicsView_rubberBandChanged(const QRect &viewportRect, c
         rect_x2 = (int)toScenePoint.x();
         rect_y2 = (int)toScenePoint.y();
     }
+}
+
+void ImageEditor::on_historgram_triggered()
+{
+
 }

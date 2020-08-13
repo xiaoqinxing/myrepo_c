@@ -104,8 +104,9 @@ void ImageEffect::Blur(typeBlur type)
     }
 }
 
-tStaticsMsg* ImageEffect::calcStatics(int x1, int y1, int x2, int y2)
+tStaticsMsg* ImageEffect::calcStatics(QImage* image,int x1, int y1, int x2, int y2)
 {
+    imageconvert(image);
     //opencv中横坐标对应的是点的x坐标，纵坐标对应的是点的y坐标，坐标系和qt不同.
     //Rect的坐标和qt里面一样，不过长宽需要自己算一下
     Rect rect(x1,y1,x2-x1,y2-y1);
