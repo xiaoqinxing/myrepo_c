@@ -34,6 +34,7 @@ include_directories(${PROJECT_NAME} ${PROJECT_SOURCE_DIR})
 set(UI_FILES
     mainwindow.ui
     imageeditor.ui
+    staticsview.ui
 )
 #FILE(GLOB UI_FILES "*.ui")
 

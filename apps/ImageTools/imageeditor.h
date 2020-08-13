@@ -24,8 +24,10 @@ private:
     QPixmap pixmap;
     QPointF scensMousePos;
     QImage *nowImage;
+    StaticsView staticsview;
     void showimage(QImage *img);
     void deal_mousemove_signal(QPointF point);
+    int rect_x1,rect_y1,rect_x2,rect_y2;
 
 protected:
 
@@ -36,5 +38,7 @@ private slots:
     void on_medianblur_triggered();
     void on_bilateralblur_triggered();
     void on_actioncompare_triggered();
+    void on_statics_toggled(bool arg1);
+    void on_graphicsView_rubberBandChanged(const QRect &viewportRect, const QPointF &fromScenePoint, const QPointF &toScenePoint);
 };
 #endif // IMAGES_H

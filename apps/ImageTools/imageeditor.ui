@@ -128,6 +128,9 @@
    </property>
   </action>
   <action name="statics">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>统计信息</string>
    </property>

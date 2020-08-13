@@ -4,18 +4,17 @@
 #include "opencv2/opencv.hpp"
 #include "QFileInfo"
 #include "QImage"
+#include "QRect"
+#include "staticsview.h"
 using cv::Mat;
+/*滤波类型*/
 typedef enum{
     BoxBlur,
     Gaussian,
     MediaBlur,
     BilateralBlur
 }typeBlur;
-typedef struct{
-    unsigned char R;
-    unsigned char G;
-    unsigned char B;
-}tPointColor;
+
 class ImageEffect
 {
 public:
@@ -25,13 +24,15 @@ public:
     void saveimage(QImage* image,QString filename);
     QImage* getSrcImage();
     QImage* getDstImage();
-    tPointColor getImagePoint(QImage* image, int x, int y);
+    tRgbColor getImagePoint(QImage* image, int x, int y);
+    tStaticsMsg* calcStatics(int x1, int y1, int x2, int y2);
 private:
     Mat srcimage;
     Mat dstimage;
     Mat nowimage;
     QImage *srcqimage;
     QImage *dstqimage;
+    tStaticsMsg staticsMsg;
     void imageconvert(QImage* image);
 };
 

@@ -2,10 +2,13 @@
 #include "QMessageBox"
 #include "QObject"
 #include "QString"
+#include "QDebug"
 using namespace cv;
 ImageEffect::ImageEffect(QFileInfo file)
 {
     srcimage = imread(file.absoluteFilePath().toStdString());
+    //opencv默认格式是BGR的，转成RGB
+    cvtColor(srcimage,srcimage,COLOR_BGR2RGB);
     if(srcimage.data != NULL)
     {
         /*需要重点注意的是，当以这种方式传递数据时，就像我们在将Mat转换成
@@ -56,10 +59,10 @@ void ImageEffect::imageconvert(QImage* image)
     }
 }
 
-tPointColor ImageEffect::getImagePoint(QImage* image, int x, int y)
+tRgbColor ImageEffect::getImagePoint(QImage* image, int x, int y)
 {
     Vec3b point_rgb;
-    tPointColor ret;
+    tRgbColor ret;
     imageconvert(image);
     //at函数中i对应的是点的y坐标，j对应的是点的x坐标，而不是我们习惯的（x,y）
     point_rgb = srcimage.at<Vec3b>(y,x);
@@ -101,4 +104,40 @@ void ImageEffect::Blur(typeBlur type)
     }
 }
 
-
+tStaticsMsg* ImageEffect::calcStatics(int x1, int y1, int x2, int y2)
+{
+    //opencv中横坐标对应的是点的x坐标，纵坐标对应的是点的y坐标，坐标系和qt不同.
+    //Rect的坐标和qt里面一样，不过长宽需要自己算一下
+    Rect rect(x1,y1,x2-x1,y2-y1);
+    //利用两个Rect的交集，我们可以很轻松的避免图像裁剪区域越界的情况
+    rect &= Rect(0, 0, nowimage.cols, nowimage.rows);
+    if(rect.width <=0 || rect.height <=0){
+        return nullptr;
+    }
+    Mat staticsroi = nowimage(rect);
+    Mat staticsroi_yuv;
+    Scalar tmp;
+    tmp = mean(staticsroi);
+    staticsMsg.average_rgb.R = tmp.val[0];
+    staticsMsg.average_rgb.G = tmp.val[1];
+    staticsMsg.average_rgb.B = tmp.val[2];
+    staticsMsg.awb_gain.R = tmp.val[1]/tmp.val[0];
+    staticsMsg.awb_gain.G = 1.0;
+    staticsMsg.awb_gain.B = tmp.val[1]/tmp.val[2];
+    staticsMsg.rgb_ratio.RG_ratio =  tmp.val[0]/tmp.val[1];
+    staticsMsg.rgb_ratio.BG_ratio =  tmp.val[2]/tmp.val[1];
+    cvtColor(staticsroi, staticsroi_yuv, COLOR_RGB2YUV);
+    tmp = mean(staticsroi_yuv);
+    staticsMsg.average_yuv.Y = tmp.val[0];
+    staticsMsg.average_yuv.Cr = tmp.val[1];
+    staticsMsg.average_yuv.Cb = tmp.val[2];
+    staticsMsg.start_point.x = x1;
+    staticsMsg.start_point.y = y1;
+    staticsMsg.section_size.width = x2 - x1;
+    staticsMsg.section_size.height = y2 - y1;
+    qDebug() << x1 << y1 << x2 << y2;
+    qDebug() << staticsMsg.average_rgb.R  << staticsMsg.average_rgb.G << staticsMsg.average_rgb.B;
+    qDebug() << staticsMsg.awb_gain.R  << staticsMsg.awb_gain.G << staticsMsg.awb_gain.B;
+    qDebug() << staticsMsg.average_yuv.Y  << staticsMsg.average_yuv.Cr << staticsMsg.average_yuv.Cb;
+    return &staticsMsg;
+}

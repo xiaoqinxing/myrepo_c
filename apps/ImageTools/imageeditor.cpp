@@ -5,11 +5,13 @@
 #include "QMessageBox"
 #include "imageeffect.h"
 #include "QFileDialog"
+#include "staticsview.h"
 
 ImageEditor::ImageEditor(QFileInfo file)
     : QMainWindow()
     , ui(new Ui::ImageEditor)
     , img(ImageEffect(file))
+    , staticsview()
 {
     ui->setupUi(this);
     this->setAcceptDrops(false);
@@ -36,7 +38,8 @@ void ImageEditor::showimage(QImage *image)
 {
     //需在调用任何addItem（或addPixmap等）之前清除场景
     scene.clear();
-    scene.addPixmap(QPixmap::fromImage(image->rgbSwapped()));
+//    scene.addPixmap(QPixmap::fromImage(image->rgbSwapped()));
+    scene.addPixmap(QPixmap::fromImage(*image));
     nowImage = image;
 }
 
@@ -56,7 +59,7 @@ void ImageEditor::deal_mousemove_signal(QPointF point)
         y = 0;
     else
         y = (int)point.y();
-    tPointColor point_rgb = img.getImagePoint(nowImage,x,y);
+    tRgbColor point_rgb = img.getImagePoint(nowImage,x,y);
     ui->statusBar->showMessage(QString::asprintf("x:%d y:%d | R:%d G:%d B:%d",
                                                  x,y,point_rgb.R,
                                                  point_rgb.G,point_rgb.B));
@@ -107,4 +110,34 @@ void ImageEditor::on_actioncompare_triggered()
         showimage(img.getSrcImage());
     else
         showimage(img.getDstImage());
+}
+
+void ImageEditor::on_statics_toggled(bool arg1)
+{
+    if(arg1 == true){
+        ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+    }else{
+        ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+    }
+}
+
+void ImageEditor::on_graphicsView_rubberBandChanged(const QRect &viewportRect, const QPointF &fromScenePoint, const QPointF &toScenePoint)
+{
+    qDebug() << viewportRect << fromScenePoint<< toScenePoint;
+    if(toScenePoint.x() == 0 && toScenePoint.y() == 0 && rect_x2>rect_x1 && rect_y2>rect_y1){
+        tStaticsMsg *msg = img.calcStatics(rect_x1,rect_y1,rect_x2,rect_y2);
+        if(msg != nullptr){
+            staticsview.Update(msg);
+            staticsview.show();
+        }else{
+            QMessageBox::critical(this,
+                               tr("错误"),
+                               tr("选取区域不在图像范围内"));
+        }
+    }else{
+        rect_x1 = (int)fromScenePoint.x();
+        rect_y1 = (int)fromScenePoint.y();
+        rect_x2 = (int)toScenePoint.x();
+        rect_y2 = (int)toScenePoint.y();
+    }
 }
