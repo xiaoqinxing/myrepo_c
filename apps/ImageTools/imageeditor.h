@@ -6,6 +6,8 @@
 #include "QFileInfo"
 #include "imageeffect.h"
 #include "staticsview.h"
+//#include "histview.h"
+#include "histgramview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ImageEditor; }
@@ -30,6 +32,9 @@ private:
     void showimage(QImage *img);
     void deal_mousemove_signal(QPointF point);
     int rect_x1,rect_y1,rect_x2,rect_y2;
+//    QCustomPlot histplot;
+//    HistView hist;
+    HistgramView hist;
 
 protected:
 

@@ -24,8 +24,9 @@ public:
     void saveimage(QImage* image,QString filename);
     QImage* getSrcImage();
     QImage* getDstImage();
-    tRgbColor getImagePoint(QImage* image, int x, int y);
-    tStaticsMsg* calcStatics(QImage* image,int x1, int y1, int x2, int y2);
+    tRgbColor getImagePoint(QImage *image, int x, int y);
+    tStaticsMsg* calcStatics(QImage *image,int x1, int y1, int x2, int y2);
+    int* calcImageHist(QImage *image);
 private:
     Mat srcimage;
     Mat dstimage;
@@ -34,6 +35,7 @@ private:
     QImage *dstqimage;
     tStaticsMsg staticsMsg;
     void imageconvert(QImage* image);
+    int imageHist[4][256];
 };
 
 #endif // IMAGEEFFECT_H

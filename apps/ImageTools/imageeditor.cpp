@@ -11,6 +11,7 @@ ImageEditor::ImageEditor(QString &filename)
     , ui(new Ui::ImageEditor)
     , img(ImageEffect(filename))
     , staticsview()
+    , hist()
 {
     ui->setupUi(this);
     this->setAcceptDrops(false);
@@ -145,5 +146,5 @@ void ImageEditor::on_graphicsView_rubberBandChanged(const QRect &viewportRect, c
 
 void ImageEditor::on_historgram_triggered()
 {
-
+    hist.show();
 }

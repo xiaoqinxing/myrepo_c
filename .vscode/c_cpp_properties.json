@@ -1,9 +1,11 @@
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "Windows",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "C:\\Qt\\5.15.0\\mingw81_64\\include\\**",
+                "C:\\opencv\\opencv\\sources\\build\\install\\include\\opencv2\\**"
             ],
             "defines": [],
             "cStandard": "c11",

@@ -35,6 +35,7 @@ set(UI_FILES
     mainwindow.ui
     imageeditor.ui
     staticsview.ui
+    histgramview.ui
 )
 #FILE(GLOB UI_FILES "*.ui")
 
@@ -44,7 +45,7 @@ set(UI_FILES
 #添加资源文件
 set( QRCS resource.qrc )
 
-find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Core Gui PrintSupport REQUIRED)
 
 if(ANDROID)
   add_library( ${PROJECT_NAME} ${SOURCES} ${UI_FILES} ${QRCS})
@@ -53,7 +54,7 @@ else()
 endif()
 
 
-target_link_libraries(ImageTools PRIVATE Qt5::Widgets Qt5::Core Qt5::Gui)
+target_link_libraries(ImageTools PRIVATE Qt5::Widgets Qt5::Core Qt5::Gui Qt5::PrintSupport)
 
 
 find_package( OpenCV REQUIRED )

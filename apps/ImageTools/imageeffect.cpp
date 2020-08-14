@@ -50,7 +50,7 @@ void ImageEffect::saveimage(QImage* image, QString filename)
 }
 
 //convert from QImage to Mat
-void ImageEffect::imageconvert(QImage* image)
+void ImageEffect::imageconvert(QImage *image)
 {
     if(image == srcqimage){
         nowimage = srcimage;
@@ -60,7 +60,7 @@ void ImageEffect::imageconvert(QImage* image)
     }
 }
 
-tRgbColor ImageEffect::getImagePoint(QImage* image, int x, int y)
+tRgbColor ImageEffect::getImagePoint(QImage *image, int x, int y)
 {
     Vec3b point_rgb;
     tRgbColor ret;
@@ -105,7 +105,7 @@ void ImageEffect::Blur(typeBlur type)
     }
 }
 
-tStaticsMsg* ImageEffect::calcStatics(QImage* image,int x1, int y1, int x2, int y2)
+tStaticsMsg* ImageEffect::calcStatics(QImage *image,int x1, int y1, int x2, int y2)
 {
     imageconvert(image);
     //opencv中横坐标对应的是点的x坐标，纵坐标对应的是点的y坐标，坐标系和qt不同.
@@ -142,4 +142,42 @@ tStaticsMsg* ImageEffect::calcStatics(QImage* image,int x1, int y1, int x2, int 
     qDebug() << staticsMsg.awb_gain.R  << staticsMsg.awb_gain.G << staticsMsg.awb_gain.B;
     qDebug() << staticsMsg.average_yuv.Y  << staticsMsg.average_yuv.Cr << staticsMsg.average_yuv.Cb;
     return &staticsMsg;
+}
+
+int* ImageEffect::calcImageHist(QImage *image)
+{
+    imageconvert(image);
+    //init
+    for(int i=0;i<4;i++){
+        for(int j=0;j<256;j++){
+            imageHist[i][j] = 0;
+        }
+    }
+//    for(int i=0;i<255;i++)
+//        hist_x[i] = i;
+    int channel = nowimage.channels();
+    for(int i=0;i<nowimage.rows;i++){
+        uchar* data = nowimage.ptr<uchar>(i);
+        for(int j=0;j<nowimage.cols*channel;j++){
+            imageHist[0][data[channel*j]]++;
+            imageHist[1][data[channel*j+1]]++;
+            imageHist[2][data[channel*j+2]]++;
+        }
+    }
+    Mat yuvImage;
+    cvtColor(nowimage,yuvImage,COLOR_RGB2YUV);
+    for(int i=0;i<nowimage.rows;i++){
+        uchar* data = nowimage.ptr<uchar>(i);
+        for(int j=0;j<nowimage.cols*channel;j++){
+            imageHist[3][data[channel*j]]++;
+        }
+    }
+    return (int*)&imageHist;
+//    int channels[] = {3};
+//    int bins = 256;
+//    int hist_size[] = {bins};
+//    float range[] = {0,256};
+//    MatND dstHist;
+//    calcHist(nowimage,1,&channels,Mat(),dstHist,3,&bins,)
+
 }
