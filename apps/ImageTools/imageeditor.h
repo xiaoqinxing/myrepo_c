@@ -16,7 +16,7 @@ class ImageEditor : public QMainWindow
 
 public:
 //    ImageEditor(QWidget *parent = nullptr);
-    ImageEditor(QFileInfo file);
+    ImageEditor(QString &filename);
     ~ImageEditor();
 
 private:

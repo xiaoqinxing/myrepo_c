@@ -18,7 +18,7 @@ typedef enum{
 class ImageEffect
 {
 public:
-    ImageEffect(QFileInfo &file);
+    ImageEffect(QString &filename);
     ~ImageEffect();
     void Blur(typeBlur type);
     void saveimage(QImage* image,QString filename);

@@ -4,10 +4,10 @@
 #include "QString"
 #include "QDebug"
 using namespace cv;
-ImageEffect::ImageEffect(QFileInfo &file)
+ImageEffect::ImageEffect(QString &filename)
 {
     //需要加toLocal8Bit()，将字符串转成unicode，才能打开中文路径，否则imread会出bug!!
-    srcimage = imread(file.absoluteFilePath().toLocal8Bit().toStdString());
+    srcimage = imread(filename.toLocal8Bit().toStdString());
     //opencv默认格式是BGR的，转成RGB
     cvtColor(srcimage,srcimage,COLOR_BGR2RGB);
     if(srcimage.data != NULL)

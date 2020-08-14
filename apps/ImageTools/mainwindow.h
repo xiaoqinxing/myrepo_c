@@ -21,5 +21,7 @@ private:
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+private slots:
+    void on_actionda_triggered();
 };
 #endif // MAINWINDOW_H

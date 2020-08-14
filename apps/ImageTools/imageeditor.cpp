@@ -6,17 +6,19 @@
 #include "imageeffect.h"
 #include "QFileDialog"
 
-ImageEditor::ImageEditor(QFileInfo file)
+ImageEditor::ImageEditor(QString &filename)
     : QMainWindow()
     , ui(new Ui::ImageEditor)
-    , img(ImageEffect(file))
+    , img(ImageEffect(filename))
     , staticsview()
 {
     ui->setupUi(this);
     this->setAcceptDrops(false);
     ui->graphicsView->setAcceptDrops(false);
     ui->graphicsView->setScene(&scene);
-    setWindowTitle(file.fileName());
+    int first = filename.lastIndexOf ("/"); //从后面查找"/"位置
+    QString title = filename.right (filename.length ()-first-1); //从右边截取
+    setWindowTitle(title);
     connect(ui->graphicsView, &ImageView::mousemove_signal,
             this,&ImageEditor::deal_mousemove_signal);
     if(img.getSrcImage() != NULL)

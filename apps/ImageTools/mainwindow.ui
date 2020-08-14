@@ -46,9 +46,15 @@
     <property name="title">
      <string>文件</string>
     </property>
+    <addaction name="actionda"/>
    </widget>
    <addaction name="menu"/>
   </widget>
+  <action name="actionda">
+   <property name="text">
+    <string>打开图片</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
