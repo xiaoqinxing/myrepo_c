@@ -146,5 +146,7 @@ void ImageEditor::on_graphicsView_rubberBandChanged(const QRect &viewportRect, c
 
 void ImageEditor::on_historgram_triggered()
 {
+    tHistViewData *data = hist.getHistviewDataPtr();
+    img.calcImageHist(nowImage,data);
     hist.show();
 }

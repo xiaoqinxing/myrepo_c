@@ -26,7 +26,7 @@ public:
     QImage* getDstImage();
     tRgbColor getImagePoint(QImage *image, int x, int y);
     tStaticsMsg* calcStatics(QImage *image,int x1, int y1, int x2, int y2);
-    int* calcImageHist(QImage *image);
+    void calcImageHist(QImage *image,tHistViewData *histdata);
 private:
     Mat srcimage;
     Mat dstimage;

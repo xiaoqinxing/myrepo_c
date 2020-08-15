@@ -144,40 +144,38 @@ tStaticsMsg* ImageEffect::calcStatics(QImage *image,int x1, int y1, int x2, int 
     return &staticsMsg;
 }
 
-int* ImageEffect::calcImageHist(QImage *image)
+void ImageEffect::calcImageHist(QImage *image,tHistViewData *histdata)
 {
     imageconvert(image);
     //init
-    for(int i=0;i<4;i++){
-        for(int j=0;j<256;j++){
-            imageHist[i][j] = 0;
-        }
+    for(int i=0;i<256;i++){
+        histdata->r[i] = 0;
+        histdata->g[i] = 0;
+        histdata->b[i] = 0;
+        histdata->y[i] = 0;
     }
-//    for(int i=0;i<255;i++)
-//        hist_x[i] = i;
+
     int channel = nowimage.channels();
     for(int i=0;i<nowimage.rows;i++){
         uchar* data = nowimage.ptr<uchar>(i);
-        for(int j=0;j<nowimage.cols*channel;j++){
-            imageHist[0][data[channel*j]]++;
-            imageHist[1][data[channel*j+1]]++;
-            imageHist[2][data[channel*j+2]]++;
+        for(int j=0;j<nowimage.cols;j++){
+            int tmp1 = data[channel*j];
+            int tmp2 = data[channel*j+1];
+            int tmp3 = data[channel*j+2];
+
+
+            histdata->r[tmp1]++;
+            histdata->g[tmp2]++;
+            histdata->b[tmp3]++;
         }
     }
     Mat yuvImage;
     cvtColor(nowimage,yuvImage,COLOR_RGB2YUV);
-    for(int i=0;i<nowimage.rows;i++){
-        uchar* data = nowimage.ptr<uchar>(i);
-        for(int j=0;j<nowimage.cols*channel;j++){
-            imageHist[3][data[channel*j]]++;
+    for(int i=0;i<yuvImage.rows;i++){
+        uchar* data = yuvImage.ptr<uchar>(i);
+        for(int j=0;j<yuvImage.cols;j++){
+            histdata->y[data[channel*j]]++;
         }
     }
-    return (int*)&imageHist;
-//    int channels[] = {3};
-//    int bins = 256;
-//    int hist_size[] = {bins};
-//    float range[] = {0,256};
-//    MatND dstHist;
-//    calcHist(nowimage,1,&channels,Mat(),dstHist,3,&bins,)
-
+    return;
 }

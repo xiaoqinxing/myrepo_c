@@ -1,6 +1,6 @@
 #ifndef IMAGECOMMON_H
 #define IMAGECOMMON_H
-
+#include "QVector"
 /*RGB*/
 typedef struct{
     unsigned char R;
@@ -53,4 +53,11 @@ typedef struct{
     tiSize section_size;
 }tStaticsMsg;
 
+typedef struct{
+    QVector<double> x;
+    QVector<double> r;
+    QVector<double> g;
+    QVector<double> b;
+    QVector<double> y;
+}tHistViewData;
 #endif // IMAGECOMMON_H
