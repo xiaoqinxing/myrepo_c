@@ -6,6 +6,7 @@ HistgramView::HistgramView(QWidget *parent) :
     ui(new Ui::HistgramView)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::Dialog | Qt::WindowMaximizeButtonHint);
     ui->widget->legend->setVisible(true);
     r_graph = ui->widget->addGraph();
     r_graph->setPen(QPen(Qt::red));

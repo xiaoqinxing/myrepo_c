@@ -47,12 +47,17 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::on_actionda_triggered()
 {
+    //打开文件的时候，需要记住上一次打开的路径！
+    QSettings settings("config", "ImageTool", this);
     QString filename = QFileDialog::getOpenFileName(this,
         "打开输入图像",
-        QDir::currentPath(),
+        settings.value("LastFilePath",QDir::currentPath()).toString(),
         "Images (*.jpg *.png *.bmp)");
     if (QFile::exists(filename)) {
         ImageEditor *a = new ImageEditor(filename);
+        int i = filename.lastIndexOf('/');
+        QString Path = filename.left(i);
+        settings.setValue("LastFilePath", Path);
         ui->mdiArea->addSubWindow(a);
         a->show();
     }
