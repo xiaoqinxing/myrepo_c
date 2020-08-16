@@ -36,6 +36,7 @@ set(UI_FILES
     imageeditor.ui
     staticsview.ui
     histgramview.ui
+    rtspconfigview.ui
 )
 #FILE(GLOB UI_FILES "*.ui")
 

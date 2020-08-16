@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "rtspconfigview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,11 +18,13 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    RtspConfigView rtspconfigView;
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
 private slots:
     void on_actionda_triggered();
+    void on_actionda_2_triggered();
 };
 #endif // MAINWINDOW_H

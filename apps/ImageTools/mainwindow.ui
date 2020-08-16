@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -47,12 +47,18 @@
      <string>文件</string>
     </property>
     <addaction name="actionda"/>
+    <addaction name="actionda_2"/>
    </widget>
    <addaction name="menu"/>
   </widget>
   <action name="actionda">
    <property name="text">
     <string>打开图片</string>
+   </property>
+  </action>
+  <action name="actionda_2">
+   <property name="text">
+    <string>打开设备(RTSP)</string>
    </property>
   </action>
  </widget>

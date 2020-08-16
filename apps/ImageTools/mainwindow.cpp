@@ -10,6 +10,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , rtspconfigView()
 {
     ui->setupUi(this);
     this->setAcceptDrops(true);
@@ -61,4 +62,11 @@ void MainWindow::on_actionda_triggered()
         ui->mdiArea->addSubWindow(a);
         a->show();
     }
+}
+
+void MainWindow::on_actionda_2_triggered()
+{
+    rtspconfigView.show();
+    QString *a = rtspconfigView.getRtspAddress();
+    qDebug() << *a;
 }
