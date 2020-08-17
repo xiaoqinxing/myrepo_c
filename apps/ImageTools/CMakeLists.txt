@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(ImageTools LANGUAGES CXX)
+message("====================================================")
+message(STATUS "build app: " ${PROJECT_NAME})
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -25,18 +27,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #endif()
 
 # find all source file in src
-aux_source_directory(${PROJECT_SOURCE_DIR} SOURCES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/imageeditor SOURCES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/imageproc SOURCES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/mainwindow SOURCES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/videoplayer SOURCES)
 message(STATUS "SRC FILES: " ${SOURCES})
 
-include_directories(${PROJECT_NAME} ${PROJECT_SOURCE_DIR})
+include_directories(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/imageeditor)
+include_directories(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/imageproc)
+include_directories(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/mainwindow)
+include_directories(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/videoplayer)
 
 #查找当前文件夹中所有的ui文件
 set(UI_FILES
-    mainwindow.ui
-    imageeditor.ui
-    staticsview.ui
-    histgramview.ui
-    rtspconfigview.ui
+    mainwindow/mainwindow.ui
+    imageeditor/imageeditor.ui
+    imageeditor/staticsview.ui
+    imageeditor/histgramview.ui
+    videoplayer/rtspconfigview.ui
 )
 #FILE(GLOB UI_FILES "*.ui")
 
