@@ -6,14 +6,17 @@
 #include "QDebug"
 #include "QDir"
 #include "QFileDialog"
+#include "SimplePlayer.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , rtspconfigView()
+    ,player()
 {
     ui->setupUi(this);
     this->setAcceptDrops(true);
+    connect(&rtspconfigView,&RtspConfigView::rtspconfig_signal,this,&MainWindow::deal_video_start_signal);
 }
 
 MainWindow::~MainWindow()
@@ -67,6 +70,14 @@ void MainWindow::on_actionda_triggered()
 void MainWindow::on_actionda_2_triggered()
 {
     rtspconfigView.show();
-    QString *a = rtspconfigView.getRtspAddress();
-    qDebug() << *a;
+}
+void MainWindow::deal_video_start_signal(QString url)
+{
+//    videoplayer *a = new videoplayer();
+    player.setSrcName(url);
+    ui->mdiArea->addSubWindow(&player);
+    player.show();
+//        SimplePlayer *a = new SimplePlayer();
+//        ui->mdiArea->addSubWindow(a);
+//        a->show();
 }

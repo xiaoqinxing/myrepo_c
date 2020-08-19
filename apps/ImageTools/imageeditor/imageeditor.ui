@@ -147,7 +147,7 @@
   </action>
   <action name="saveimage">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/tool_icon/resource/save_icon.png</normaloff>:/tool_icon/resource/save_icon.png</iconset>
    </property>
    <property name="text">
@@ -172,7 +172,7 @@
   </action>
   <action name="actioncompare">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/tool_icon/resource/compare.png</normaloff>:/tool_icon/resource/compare.png</iconset>
    </property>
    <property name="text">
@@ -191,7 +191,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../resource.qrc"/>
  </resources>
  <connections/>
 </ui>

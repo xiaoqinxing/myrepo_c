@@ -19,6 +19,7 @@ public:
 private:
     Ui::MainWindow *ui;
     RtspConfigView rtspconfigView;
+    videoplayer player;
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);

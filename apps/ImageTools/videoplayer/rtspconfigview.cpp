@@ -33,6 +33,7 @@ void RtspConfigView::on_buttonBox_accepted()
     settings.setValue("rtsp_port",ui->port->text());
     rtsp_address = "rtsp://"+ui->username->text()+":"+ui->password->text()
             +"@" + ui->ip->text() + ":" + ui->port->text();
+    emit rtspconfig_signal(rtsp_address);
 }
 
 QString* RtspConfigView::getRtspAddress()

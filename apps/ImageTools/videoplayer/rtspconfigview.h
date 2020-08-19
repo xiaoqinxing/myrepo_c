@@ -2,7 +2,7 @@
 #define RTSPCONFIGVIEW_H
 
 #include <QDialog>
-
+#include <videoplayer.h>
 namespace Ui {
 class RtspConfigView;
 }
@@ -23,6 +23,9 @@ private slots:
 private:
     Ui::RtspConfigView *ui;
     QString rtsp_address;
+
+signals:
+    void rtspconfig_signal(QString url);
 };
 
 #endif // RTSPCONFIGVIEW_H
