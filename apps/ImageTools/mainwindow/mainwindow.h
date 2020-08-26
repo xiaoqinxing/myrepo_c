@@ -20,6 +20,7 @@ private:
     Ui::MainWindow *ui;
     RtspConfigView rtspconfigView;
     videoplayer player;
+    void deal_video_start_signal(QString url);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);

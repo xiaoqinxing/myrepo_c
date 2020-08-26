@@ -7,8 +7,9 @@ videoplayer::videoplayer(QWidget *parent) :
     url()
 {
     ui->setupUi(this);
-    VlcCommon::setPluginPath("./plugins");
+//    VlcCommon::setPluginPath("./plugins");
     instance = new VlcInstance(VlcCommon::args(), this);
+
     player = new VlcMediaPlayer(instance);
     player->setVideoWidget(ui->widget);
 }

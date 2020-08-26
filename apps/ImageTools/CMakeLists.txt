@@ -13,6 +13,10 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# 依赖
+add_subdirectory(${PROJECT_SOURCE_DIR}/components/qcustomplot)
+
+
 set(VLCQt_INCLUDE
     "C:/Program Files (x86)/VLC-Qt/include/VLCQtWidgets"
 )
@@ -50,8 +54,6 @@ set(UI_FILES
     imageeditor/histgramview.ui
     videoplayer/rtspconfigview.ui
     videoplayer/videoplayer.ui
-    videoplayer/SimplePlayer.ui
-    videoplayer/EqualizerDialog.ui
 )
 #FILE(GLOB UI_FILES "*.ui")
 
@@ -68,6 +70,9 @@ if(ANDROID)
 else()
   add_executable( ${PROJECT_NAME} ${SOURCES} ${UI_FILES} ${QRCS})
 endif()
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/components/qcustomplot)
+target_link_libraries(${PROJECT_NAME} PRIVATE qcustomplot)
 
 # find QT
 find_package(Qt5 COMPONENTS Widgets Core Gui PrintSupport REQUIRED)

@@ -6,7 +6,6 @@
 #include "QDebug"
 #include "QDir"
 #include "QFileDialog"
-#include "SimplePlayer.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
